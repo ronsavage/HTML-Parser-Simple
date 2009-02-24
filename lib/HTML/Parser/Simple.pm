@@ -495,8 +495,7 @@ sub parse
 			}
 
 			$metadata = $$self{'_current'} -> getNodeValue();
-			$msg .= "Current tag: <$$metadata{'name'}>. ";
-			$msg .= 'Next 50 chars: ' . substr($html, 0, 50);
+			$msg      .= "Current tag: <$$metadata{'name'}>. Next 50 chars: " . substr($html, 0, 50);
  
 			Carp::croak $msg;
 		}
