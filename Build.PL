@@ -13,7 +13,8 @@ my($builder) = Module::Build -> new
 	},
 	requires =>
 	{
-		Carp => 0,
+		Carp         => 0,
+		Tree::Simple => 0,
 	},
 );
 

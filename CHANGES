@@ -1,4 +1,8 @@
 Revision history for Perl extension HTML::Parser::Simple.
 
+1.01  Wed Feb 25 19:44:00 2009
+	  - Add Tree::Simple to Build.PL and Makefile.PL
+	  - Patch POD to replace note about required module Tree::DAG_Node with Tree::Simple
+
 1.00  Wed Feb 18 11:22:00 2009
 	  - Original version
