@@ -1,10 +1,15 @@
-use Test::More tests => 1;
+use lib 't';
+
+use Data;
 
 use HTML::Parser::Simple;
 
+use Test::More tests => 1;
+
 # -----------------------
 
-my($html)   = '<html><head><title><>T</title></head><body><!--Comment-->B</body></html>';
+my($data)   = Data -> new({input_dir => 't/data'});
+my($html)   = $data -> read_file('04.parse.error.html');
 my($parser) = HTML::Parser::Simple -> new();
 
 eval{$parser -> parse($html)};

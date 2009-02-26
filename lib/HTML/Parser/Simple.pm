@@ -53,6 +53,7 @@ our $VERSION = '1.01';
 	 _input_dir  => '',
 	 _output_dir => '',
 	 _verbose    => 0,
+	 _xhtml      => 0,
 	);
 
 	sub _default_for
@@ -146,6 +147,16 @@ sub handle_start_tag
 	}
 
 } # End of handle_start_tag.
+
+# -----------------------------------------------
+
+sub handle_xml_declaration
+{
+	my($self, $s) = @_;
+
+	$self -> handle_content($s);
+
+} # End of handle_xml_declaration.
 
 # -----------------------------------------------
 
@@ -397,7 +408,9 @@ sub parse
 			{
 				if (substr($html, 0, 1) eq '<')
 				{
-					if ($html =~ /^(<(\w+)((?:\s+[-\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)/)
+					# The ':' in '[-:\w]' is for XHTML. I've decided to not use 2 regexps, for HTML and XHTML.
+
+					if ($html =~ /^(<(\w+)((?:\s+[-:\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)/)
 					{
 						substr($html, 0, length $1) = '';
 						$in_content                 = 0;
@@ -447,6 +460,26 @@ sub parse
 				}
 			}
 
+			# Is is an XML declaration?
+
+			if ($$self{'_xhtml'} && $in_content)
+			{
+				$s = substr($html, 0, 5);
+
+				if ($s eq '<?xml')
+				{
+					$offset = index($html, '?>');
+
+					if ($offset >= 0)
+					{
+						$self -> handle_xml_declaration(substr($html, 0, ($offset + 2) ) );
+
+						substr($html, 0, $offset + 2) = '';
+						$in_content                   = 0;
+					}
+				}
+			}
+
 			if ($in_content)
 			{
 				$offset = index($html, '<');
@@ -488,7 +521,7 @@ sub parse
 
 			my($metadata);
 
-			if ($parent)
+			if ($parent && $parent -> can('getNodeValue') )
 			{
 				$metadata = $parent -> getNodeValue();
 				$msg      .= "Parent tag: <$$metadata{'name'}>. ";
@@ -784,6 +817,30 @@ Write more or less progress messages to STDERR.
 The default value is 0.
 
 Note: Currently, setting verbose does nothing.
+
+=item xhtml
+
+This takes either a 0 or a 1.
+
+0 means do not accept an XML declaration, such as <?xml version="1.0" encoding="UTF-8"?>
+at the start of the input file, and some other XHTML features.
+
+1 means accept it.
+
+The default value is 0.
+
+Warning: XHTML is not handled. Use of this option is not recommended. The only XHTML changes to this code, so far,
+are:
+
+=over 4
+
+=item Accept the XML declaration
+
+=item Accept attribute names containing the ':' char
+
+E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
+
+=back
 
 =back
 

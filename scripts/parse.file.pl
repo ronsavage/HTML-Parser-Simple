@@ -13,10 +13,15 @@ use HTML::Parser::Simple;
 my($p) = HTML::Parser::Simple -> new
 (
  {
-	 input_dir  => '/home/ron/httpd/prefork/htdocs',
-	 output_dir => '/home/ron/httpd/prefork/htdocs',
+	 input_dir  => './scripts',
+	 output_dir => './scripts',
 	 verbose    => 1,
+	 xhtml      => 1,
  }
 );
 
-$p -> parse_file('s.1.html', 's.2.html');
+# Works:
+#$p -> parse_file('90.xml.declaration.xhtml', 'out.xhtml');
+
+# Fails:
+$p -> parse_file('91.mathml.xhtml', 'out.xhtml');
