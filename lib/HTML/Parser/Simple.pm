@@ -37,7 +37,7 @@ our @EXPORT = qw(
 
 );
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 # -----------------------------------------------
 
@@ -989,9 +989,9 @@ Reveal.pl ships with HTML::Revelation.
 
 Call the output file output.1.html.
 
-=item Run input.html thru parse.file.pl
+=item Run input.html thru parse.html.pl
 
-Parse.file.pl ships with HTML::Parser::Simple.
+Parse.html.pl ships with HTML::Parser::Simple.
 
 Call the output file parsed.html.
 

@@ -1,5 +1,15 @@
 Revision history for Perl extension HTML::Parser::Simple.
 
+1.02  Thu Feb 26 11:24:00 2009
+	  - Rename scripts/parse.file.pl to scripts/parse.html.pl
+	  - Ship scripts/parse.xhtml.pl
+	  - Ship t/Data.pm to read in test data from t/data/
+	  - Rewrite t/*.t to use t/Data.pm
+	  - Patch Simple.pm to accept xhtml as a parameter to new
+	  - Patch Simple.pm to use xhtml is a couple of places
+	  - Ship t/data/90.xml.declaration.xhtml
+	  - Ship t/90.xml.declaration.t
+
 1.01  Wed Feb 25 19:44:00 2009
 	  - Add Tree::Simple to Build.PL and Makefile.PL
 	  - Patch POD to replace note about required module Tree::DAG_Node with Tree::Simple
