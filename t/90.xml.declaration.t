@@ -10,11 +10,12 @@ use Test::More tests => 1;
 
 my($data)   = Data -> new({input_dir => 't/data'});
 my($html)   = $data -> read_file('90.xml.declaration.xhtml');
-my($parser) = HTML::Parser::Simple -> new({xhtml => 1});
+my($parser) = HTML::Parser::Simple -> new();
 
+$parser -> set_xhtml(1);
 $parser -> parse($html);
-$parser -> traverse($parser -> root() );
+$parser -> traverse($parser -> get_root() );
 
-my($result) = $parser -> result();
+my($result) = $parser -> get_result();
 
 ok($result =~ m/..xml.+?version.+?encoding/, 'XML declaration is preserved');

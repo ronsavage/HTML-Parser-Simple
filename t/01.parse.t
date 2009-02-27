@@ -13,8 +13,8 @@ my($html)   = $data -> read_file('01.parse.html');
 my($parser) = HTML::Parser::Simple -> new();
 
 $parser -> parse($html);
-$parser -> traverse($parser -> root() );
+$parser -> traverse($parser -> get_root() );
 
-my($result) = $parser -> result();
+my($result) = $parser -> get_result();
 
 is($html, $result, 'Input matches output');
