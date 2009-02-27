@@ -1063,8 +1063,6 @@ C<HTML::Parser::Simple> - Parse nice HTML files without needing a compiler
 	$p -> traverse($p -> get_root() );
 	print $p -> get_result();
 
-Warning: Use only the documented methods.
-
 =head1 Description
 
 C<HTML::Parser::Simple> is a pure Perl module.
@@ -1072,8 +1070,6 @@ C<HTML::Parser::Simple> is a pure Perl module.
 It parses HTML V 4 files, and generates a tree of nodes per HTML tag.
 
 The data associated with each node is documented in the FAQ.
-
-Warning: Use only the documented methods.
 
 =head1 Distributions
 
@@ -1164,9 +1160,49 @@ These are all treated as content.
 
 =back
 
+=head1 Method: get_current_node()
+
+Returns the node which the parser calls the current node.
+
+=head1 Method: get_depth()
+
+Returns the nesting depth of the current tag.
+
+It's just there in case you need it.
+
+=head1 Method: get_input_dir()
+
+Returns the input_dir parameter, as passed in to C<new()>.
+
+=head1 Method: get_output_dir()
+
+Returns the output_dir parameter, as passed in to C<new()>.
+
+=head1 Method: get_node_type()
+
+Returns the type of the most recently created node, 'global', 'head', or 'body'.
+
+See the first question in the FAQ for details.
+
+=head1 Method: get_result()
+
+Returns the result so far of the parse.
+
+=head1 Method: get_root()
+
+Returns the node which the parser calls the root of the tree of nodes.
+
+=head1 Method: get_verbose()
+
+Returns the verbose parameter, as passed in to C<new()>.
+
+=head1 Method: get_xhtml()
+
+Returns the xhtml parameter, as passed in to C<new()>.
+
 =head1 Method: log($msg)
 
-Print $msg to STDERR if C<new()> was called as C<< new({verbose => 1}) >>.
+Print $msg to STDERR if C<new()> was called as C<< new({verbose => 1}) >>, or if $p -> set_verbose(1) was called.
 
 Otherwise, print nothing.
 
@@ -1178,19 +1214,69 @@ After calling C<< $p -> parse() >>, you must call C<< $p -> traverse($p -> get_r
 
 Alternately, call C<< $p -> parse_file() >>, which calls all these methods for you.
 
+Note: C<parse()> may be called directly or via C<parse_file()>.
+
 =head1 Method: parse_file($input_file_name, $output_file_name)
 
 Parses the HTML in the input file, and writes the result to the output file.
 
-=head1 Method: get_result()
+=head1 Method: set_current_node($node)
 
-Returns a string which is the result of calling C<< $p -> traverse($p -> get_root() ) >>.
+Sets the node which the parser calls the current node.
 
-=head1 Method: get_root()
+Returns undef.
 
-Returns the root of the tree constructed by calling C<< $p -> parse() >>.
+=head1 Method: set_depth($depth)
 
-Note: C<parse()> may be called directly or via C<parse_file()>.
+Sets the nesting depth of the current node.
+
+Returns undef.
+
+It's just there in case you need it.
+
+=head1 Method: set_input_dir($dir_name)
+
+Sets the input_dir parameter, as though it was passed in to C<new()>.
+
+Returns undef.
+
+=head1 Method: set_output_dir($dir_name)
+
+Sets the output_dir parameter, as though it was passed in to C<new()>.
+
+Returns undef.
+
+=head1 Method: set_node_type($node_type)
+
+Sets the type of the next node to be created, 'global', 'head', or 'body'.
+
+See the first question in the FAQ for details.
+
+Returns undef.
+
+=head1 Method: set_result($string)
+
+Sets the result so far of the parse.
+
+Returns undef.
+
+=head1 Method: set_root($node)
+
+Returns the node which the parser calls the root of the tree of nodes.
+
+Returns undef.
+
+=head1 Method: set_verbose($Boolean)
+
+Sets the verbose parameter, as though it was passed in to C<new()>.
+
+Returns undef.
+
+=head1 Method: set_xhtml($Boolean)
+
+Sets the xhtml parameter, as though it was passed in to C<new()>.
+
+Returns undef.
 
 =head1 FAQ
 
@@ -1198,9 +1284,7 @@ Note: C<parse()> may be called directly or via C<parse_file()>.
 
 =item What is the format of the data stored in each node of the tree?
 
-The data of each node is a hash ref:
-
-The keys/values of this hash ref are:
+The data of each node is a hash ref. The keys/values of this hash ref are:
 
 =over 4
 
