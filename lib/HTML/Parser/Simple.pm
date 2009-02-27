@@ -71,6 +71,46 @@ our $VERSION = '1.02';
 
 # -----------------------------------------------
 
+sub current
+{
+	my($self, $current) = @_;
+
+	if ($current)
+	{
+		$$self{'_current'} = $current;
+	}
+
+	return $$self{'_current'};
+
+} # End of current.
+
+# -----------------------------------------------
+
+sub depth
+{
+	my($self, $depth) = @_;
+
+	if (defined $depth)
+	{
+		$$self{'_depth'} = $depth;
+	}
+
+	return $$self{'_depth'};
+
+} # End of depth.
+
+# -----------------------------------------------
+
+sub handle_attlist
+{
+	my($self, $s) = @_;
+
+	$self -> handle_content($s);
+
+} # End of handle_attlist.
+
+# -----------------------------------------------
+
 sub handle_comment
 {
 	my($self, $s) = @_;
@@ -84,11 +124,11 @@ sub handle_comment
 sub handle_content
 {
 	my($self, $s)                 = @_;
-	my($count)                    = $$self{'_current'} -> getChildCount();
-	my($metadata)                 = $$self{'_current'} -> getNodeValue();
+	my($count)                    = $self -> current() -> getChildCount();
+	my($metadata)                 = $self -> current() -> getNodeValue();
 	$$metadata{'content'}[$count] .= $s;
 
-	$$self{'_current'} -> setNodeValue($metadata);
+	$self -> current() -> setNodeValue($metadata);
 
 } # End of handle_content.
 
@@ -104,6 +144,16 @@ sub handle_doctype
 
 # -----------------------------------------------
 
+sub handle_element_type_declaration
+{
+	my($self, $s) = @_;
+
+	$self -> handle_content($s);
+
+} # End of handle_element_type_declaration.
+
+# -----------------------------------------------
+
 sub handle_end_tag
 {
 	my($self, $tag_name) = @_;
@@ -115,9 +165,8 @@ sub handle_end_tag
 
 	if (! $$self{'_empty'}{$tag_name})
 	{
-		$$self{'_current'} = $$self{'_current'} -> getParent();
-
-		$$self{'_depth'}--;
+		$self -> current($self -> current() -> getParent() );
+		$self -> depth($self -> depth() - 1);
 	}
 
 } # End of handle_end_tag.
@@ -128,7 +177,7 @@ sub handle_start_tag
 {
 	my($self, $tag_name, $attributes, $unary) = @_;
 
-	$$self{'_depth'}++;
+	$self -> depth($self -> depth() + 1);
 
 	if ($tag_name eq 'head')
 	{
@@ -139,11 +188,11 @@ sub handle_start_tag
 		$self -> node_type('body');
 	}
 
-	my($node) = $self -> new_node($tag_name, $attributes, $$self{'_current'});
+	my($node) = $self -> new_node($tag_name, $attributes, $self -> current() );
 
 	if (! $$self{'_empty'}{$tag_name})
 	{
-		$$self{'_current'} = $node;
+		$self -> current($node);
 	}
 
 } # End of handle_start_tag.
@@ -160,11 +209,26 @@ sub handle_xml_declaration
 
 # -----------------------------------------------
 
+sub input_dir
+{
+	my($self, $input_dir) = @_;
+
+	if ($input_dir)
+	{
+		$$self{'_input_dir'} = $input_dir;
+	}
+
+	return $$self{'_input_dir'};
+
+} # End of input_dir.
+
+# -----------------------------------------------
+
 sub log
 {
 	my($self, $msg) = @_;
 
-	if ($$self{'_verbose'})
+	if ($self -> verbose() )
 	{
 		print STDERR "$msg\n";
 	}
@@ -245,8 +309,7 @@ sub new
 	 thead => 1,
 	 'tr' => 1,
 	};
-	$$self{'_depth'}   = 0;
-	$$self{'_empty'}   =
+	$$self{'_empty'} =
 	{
 	 area => 1,
 	 base => 1,
@@ -308,13 +371,23 @@ sub new
 	 var => 1,
 	};
 	$$self{'_known_tag'} = {%{$$self{'_block'} }, %{$$self{'_close_self'} }, %{$$self{'_empty'} }, %{$$self{'_inline'} } };
-	$$self{'_result'}    = '';
 
+	$self -> depth(0);
 	$self -> node_type('global');
+	$self -> current($self -> new_node('root', '') );
+	$self -> result('');
+	$self -> root($self -> current() );
 
-	$$self{'_current'} = $self -> new_node('root', '');
+	if ($self -> xhtml() )
+	{
+		# Compared to the non-XHTML re, this has a extra  ':' just under the ':'.
 
-	$self -> root($$self{'_current'});
+		$$self{'_tag_with_attribute'} = q#^(<(\w+)((?:\s+[-:\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)#;
+	}
+	else
+	{
+		$$self{'_tag_with_attribute'} = q#^(<(\w+)((?:\s+[-\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)#;
+	}
 
 	return $self;
 
@@ -364,6 +437,21 @@ sub node_type
 
 # -----------------------------------------------
 
+sub output_dir
+{
+	my($self, $output_dir) = @_;
+
+	if ($output_dir)
+	{
+		$$self{'_output_dir'} = $output_dir;
+	}
+
+	return $$self{'_output_dir'};
+
+} # End of output_dir.
+
+# -----------------------------------------------
+
 sub parse
 {
 	my($self, $html) = @_;
@@ -408,9 +496,7 @@ sub parse
 			{
 				if (substr($html, 0, 1) eq '<')
 				{
-					# The ':' in '[-:\w]' is for XHTML. I've decided to not use 2 regexps, for HTML and XHTML.
-
-					if ($html =~ /^(<(\w+)((?:\s+[-:\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)/)
+					if ($html =~ /$$self{'_tag_with_attribute'}/)
 					{
 						substr($html, 0, length $1) = '';
 						$in_content                 = 0;
@@ -462,7 +548,7 @@ sub parse
 
 			# Is is an XML declaration?
 
-			if ($$self{'_xhtml'} && $in_content)
+			if ($self -> xhtml() && $in_content)
 			{
 				$s = substr($html, 0, 5);
 
@@ -475,6 +561,66 @@ sub parse
 						$self -> handle_xml_declaration(substr($html, 0, ($offset + 2) ) );
 
 						substr($html, 0, $offset + 2) = '';
+						$in_content                   = 0;
+					}
+				}
+			}
+
+			# Is is an ATTLIST?
+
+			if ($self -> xhtml() && $in_content)
+			{
+				$s = substr($html, 0, 9);
+
+				if ($s eq '<!ATTLIST')
+				{
+					$offset = index($html, '>');
+
+					if ($offset >= 0)
+					{
+						$self -> handle_attlist(substr($html, 0, ($offset + 1) ) );
+
+						substr($html, 0, $offset + 1) = '';
+						$in_content                   = 0;
+					}
+				}
+			}
+
+			# Is is an Element type declaration?
+
+			if ($self -> xhtml() && $in_content)
+			{
+				$s = substr($html, 0, 9);
+
+				if ($s eq '<!ELEMENT')
+				{
+					$offset = index($html, '>');
+
+					if ($offset >= 0)
+					{
+						$self -> handle_element_type_declaration(substr($html, 0, ($offset + 1) ) );
+
+						substr($html, 0, $offset + 1) = '';
+						$in_content                   = 0;
+					}
+				}
+			}
+
+			# Is is an Entity declaration?
+
+			if ($self -> xhtml() && $in_content)
+			{
+				$s = substr($html, 0, 8);
+
+				if ($s eq '<!ENTITY')
+				{
+					$offset = index($html, '>');
+
+					if ($offset >= 0)
+					{
+						$self -> handle_element_type_declaration(substr($html, 0, ($offset + 1) ) );
+
+						substr($html, 0, $offset + 1) = '';
 						$in_content                   = 0;
 					}
 				}
@@ -517,7 +663,7 @@ sub parse
 		if ($html eq $original)
 		{
 			my($msg)    = 'Parse error. ';
-			my($parent) = $$self{'_current'} -> getParent();
+			my($parent) = $self -> current() -> getParent();
 
 			my($metadata);
 
@@ -527,7 +673,7 @@ sub parse
 				$msg      .= "Parent tag: <$$metadata{'name'}>. ";
 			}
 
-			$metadata = $$self{'_current'} -> getNodeValue();
+			$metadata = $self -> current() -> getNodeValue();
 			$msg      .= "Current tag: <$$metadata{'name'}>. Next 50 chars: " . substr($html, 0, 50);
  
 			Carp::croak $msg;
@@ -597,9 +743,9 @@ sub parse_file
 {
 	my($self, $input_file_name, $output_file_name) = @_;
 
-	if ($$self{'_input_dir'})
+	if ($self -> input_dir() )
 	{
-		$input_file_name = File::Spec -> catfile($$self{'_input_dir'}, $input_file_name);
+		$input_file_name = File::Spec -> catfile($self -> input_dir(), $input_file_name);
 	}
 
 	open(INX, $input_file_name) || Carp::croak "Can't open($input_file_name): $!";
@@ -615,9 +761,9 @@ sub parse_file
 	$self -> parse($html);
 	$self -> traverse($self -> root() );
 
-	if ($$self{'_output_dir'})
+	if ($self -> output_dir() )
 	{
-		$output_file_name = File::Spec -> catfile($$self{'_output_dir'}, $output_file_name);
+		$output_file_name = File::Spec -> catfile($self -> output_dir(), $output_file_name);
 	}
 
 	open(OUT, "> $output_file_name") || Carp::croak "Can't open(> $output_file_name): $!";
@@ -657,10 +803,16 @@ sub parse_start_tag
 } # End of parse_start_tag.
 
 # -----------------------------------------------
+# Warning: This mutator uses '.=', unlike all other mutators herein.
 
 sub result
 {
-	my($self) = @_;
+	my($self, $result) = @_;
+
+	if ($result)
+	{
+		$$self{'_result'} .= $result;
+	}
 
 	return $$self{'_result'};
 
@@ -696,7 +848,7 @@ sub traverse
 
 	if ($name ne 'root')
 	{
-		$$self{'_result'} .= "<$name$$metadata{'attributes'}>";
+		$self -> result("<$name$$metadata{'attributes'}>");
 	}
 
 	my($index);
@@ -704,23 +856,53 @@ sub traverse
 
 	for $index (0 .. $#child)
 	{
-		$$self{'_result'} .= $index <= $#$content && defined($$content[$index]) ? $$content[$index] : '';
-
+		$self -> result($index <= $#$content && defined($$content[$index]) ? $$content[$index] : '');
 		$self -> traverse($child[$index]);
 	}
 
 	# Output the content after the last child node has been closed,
 	# but before the current node is closed.
 
-	$index            = $#child + 1;
-	$$self{'_result'} .= $index <= $#$content && defined($$content[$index]) ? $$content[$index] : '';
+	$index = $#child + 1;
+
+	$self -> result($index <= $#$content && defined($$content[$index]) ? $$content[$index] : '');
 
 	if (! $$self{'_empty'}{$name} && ($name ne 'root') )
 	{
-		$$self{'_result'} .= "</$name>";
+		$self -> result("</$name>");
 	}
 
 } # End of traverse.
+
+# -----------------------------------------------
+
+sub verbose
+{
+	my($self, $verbose) = @_;
+
+	if ($verbose)
+	{
+		$$self{'_verbose'} = $verbose;
+	}
+
+	return $$self{'_verbose'};
+
+} # End of verbose.
+
+# -----------------------------------------------
+
+sub xhtml
+{
+	my($self, $xhtml) = @_;
+
+	if ($xhtml)
+	{
+		$$self{'_xhtml'} = $xhtml;
+	}
+
+	return $$self{'_xhtml'};
+
+} # End of xhtml.
 
 # -----------------------------------------------
 
@@ -836,11 +1018,27 @@ are:
 
 =item Accept the XML declaration
 
+E.g.: <?xml version="1.0" standalone='yes'?>.
+
 =item Accept attribute names containing the ':' char
 
 E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
 
+=item Accept ATTLISTs
+
+E.g.: <!ATTLIST poem   xml:lang CDATA 'fr'>.
+
+=item Accept Element Type declarations
+
+E.g.: <!ELEMENT br EMPTY>.
+
+=item Accept Entity declarations
+
+E.g.: <!ENTITY Pub-Status "This is a pre-release of the specification.">.
+
 =back
+
+These are all treated as content.
 
 =back
 
@@ -865,6 +1063,8 @@ Parses the HTML in the input file, and writes the result to the output file.
 =head1 Method: result()
 
 Returns a string which is the result of calling C<< $p -> traverse($p -> root() ) >>.
+
+Warning: This mutator uses '.=', unlike all other mutators herein.
 
 =head1 Method: root()
 

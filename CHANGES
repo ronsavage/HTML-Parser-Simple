@@ -7,8 +7,8 @@ Revision history for Perl extension HTML::Parser::Simple.
 	  - Rewrite t/*.t to use t/Data.pm
 	  - Patch Simple.pm to accept xhtml as a parameter to new
 	  - Patch Simple.pm to use xhtml is a couple of places
-	  - Ship t/data/90.xml.declaration.xhtml
-	  - Ship t/90.xml.declaration.t
+	  - Patch Simple.pm to use accessors for some object attributes
+	  - Ship various tests, with data, for XHTML
 
 1.01  Wed Feb 25 19:44:00 2009
 	  - Add Tree::Simple to Build.PL and Makefile.PL
