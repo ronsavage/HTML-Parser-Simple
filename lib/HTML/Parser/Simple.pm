@@ -188,16 +188,6 @@ sub get_xhtml
 
 # -----------------------------------------------
 
-sub handle_attlist
-{
-	my($self, $s) = @_;
-
-	$self -> handle_content($s);
-
-} # End of handle_attlist.
-
-# -----------------------------------------------
-
 sub handle_comment
 {
 	my($self, $s) = @_;
@@ -228,16 +218,6 @@ sub handle_doctype
 	$self -> handle_content($s);
 
 } # End of handle_doctype.
-
-# -----------------------------------------------
-
-sub handle_element_type_declaration
-{
-	my($self, $s) = @_;
-
-	$self -> handle_content($s);
-
-} # End of handle_element_type_declaration.
 
 # -----------------------------------------------
 
@@ -578,66 +558,6 @@ sub parse
 						$self -> handle_xml_declaration(substr($html, 0, ($offset + 2) ) );
 
 						substr($html, 0, $offset + 2) = '';
-						$in_content                   = 0;
-					}
-				}
-			}
-
-			# Is is an ATTLIST?
-
-			if ($self -> get_xhtml() && $in_content)
-			{
-				$s = substr($html, 0, 9);
-
-				if ($s eq '<!ATTLIST')
-				{
-					$offset = index($html, '>');
-
-					if ($offset >= 0)
-					{
-						$self -> handle_attlist(substr($html, 0, ($offset + 1) ) );
-
-						substr($html, 0, $offset + 1) = '';
-						$in_content                   = 0;
-					}
-				}
-			}
-
-			# Is is an Element type declaration?
-
-			if ($self -> get_xhtml() && $in_content)
-			{
-				$s = substr($html, 0, 9);
-
-				if ($s eq '<!ELEMENT')
-				{
-					$offset = index($html, '>');
-
-					if ($offset >= 0)
-					{
-						$self -> handle_element_type_declaration(substr($html, 0, ($offset + 1) ) );
-
-						substr($html, 0, $offset + 1) = '';
-						$in_content                   = 0;
-					}
-				}
-			}
-
-			# Is is an Entity declaration?
-
-			if ($self -> get_xhtml() && $in_content)
-			{
-				$s = substr($html, 0, 8);
-
-				if ($s eq '<!ENTITY')
-				{
-					$offset = index($html, '>');
-
-					if ($offset >= 0)
-					{
-						$self -> handle_element_type_declaration(substr($html, 0, ($offset + 1) ) );
-
-						substr($html, 0, $offset + 1) = '';
 						$in_content                   = 0;
 					}
 				}
@@ -1142,21 +1062,7 @@ E.g.: <?xml version="1.0" standalone='yes'?>.
 
 E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
 
-=item Accept ATTLISTs
-
-E.g.: <!ATTLIST poem   xml:lang CDATA 'fr'>.
-
-=item Accept Element Type declarations
-
-E.g.: <!ELEMENT br EMPTY>.
-
-=item Accept Entity declarations
-
-E.g.: <!ENTITY Pub-Status "This is a pre-release of the specification.">.
-
 =back
-
-These are all treated as content.
 
 =back
 
@@ -1346,6 +1252,10 @@ It's just there in case you need it.
 They are treated as content. This includes the prefix '<!--' and the suffix '-->'.
 
 =item How is DOCTYPE handled?
+
+It is treated as content belonging to the root of the tree.
+
+=item How is the XML declaration handled?
 
 It is treated as content belonging to the root of the tree.
 
