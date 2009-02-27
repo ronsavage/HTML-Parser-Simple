@@ -9,11 +9,10 @@ Revision history for Perl extension HTML::Parser::Simple.
 	  - Patch Simple.pm to use xhtml in a few of places. XHTML support is not finished!
 	  - Patch Simple.pm to use accessors for object attributes as per PBP. Specifically:
 	  get/set_*() for current_node, depth, input_dir, node_type, output_dir, result, root, verbose, xhtml
-	  - Rename result() to get_result()
-	  - Rename root() to get_root()
-	  - Rename verbose() to get_verbose()
-	  - Rename new_node() to create_new_node(), since that makes more sense now that I am using
-	  separate getters and setters for attributes
+	  - Hence, rename result() to get_result()
+	  - Hence, rename root() to get_root()
+	  - Hence, rename verbose() to get_verbose()
+	  - Rename new_node() to create_new_node(), since that makes more sense with get/set_*()
 	  - Ship various tests, with data, for XHTML
 
 1.01  Wed Feb 25 19:44:00 2009
