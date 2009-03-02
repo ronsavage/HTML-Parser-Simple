@@ -16,6 +16,7 @@ Revision history for Perl extension HTML::Parser::Simple.
 	  - Hence, rename verbose() to get_verbose()
 	  - Rename new_node() to create_new_node(), since that makes more sense with get/set_*()
 	  - Ship various tests, with data, for XHTML
+	  - Add depth to the hashref of data for each tag's node in the tree
 
 1.01  Wed Feb 25 19:44:00 2009
 	  - Add Tree::Simple to Build.PL and Makefile.PL

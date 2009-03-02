@@ -88,6 +88,7 @@ sub create_new_node
 	{
 		attributes => $attributes,
 		content    => [],
+		depth      => $self -> get_depth(),
 		name       => $name,
 		node_type  => $self -> get_node_type(),
 	};
@@ -415,11 +416,11 @@ sub new
 	$$self{'_known_tag'} = {%{$$self{'_block'} }, %{$$self{'_close_self'} }, %{$$self{'_empty'} }, %{$$self{'_inline'} } };
 	$$self{'_result'}    = '';
 
-	# Warning: set_node_type() must be called before create_new_node().
+	# Warning: set_depth() and set_node_type() must be called before create_new_node().
 
+	$self -> set_depth(0);
 	$self -> set_node_type('global');
 	$self -> set_current_node($self -> create_new_node('root', '') );
-	$self -> set_depth(0);
 	$self -> set_root($self -> get_current_node() );
 
 	if ($self -> get_xhtml() )
@@ -1032,8 +1033,7 @@ at the start of the input file, and some other XHTML features.
 
 The default value is 0.
 
-Warning: XHTML is not handled. Use of this option is not recommended. The only XHTML changes to this code, so far,
-are:
+Warning: The only XHTML changes to this code, so far, are:
 
 =over 4
 
@@ -1210,6 +1210,14 @@ but before the current node is closed.
 
 Note: The DOCTYPE declaration is stored as the 0th element of the content of the root node.
 
+=item depth
+
+The nesting depth of the tag within the document.
+
+The root is at depth 0, '<html>' is at depth 1, '<head>' and '<body>' are a depth 2, and so on.
+
+It's just there in case you need it.
+
 =item The name the HTML tag
 
 So, the tag '<html>' will mean the name is 'html'.
@@ -1360,6 +1368,21 @@ But the API's are not, and are not meant to be, compatible.
 =item The tie-in
 
 Some people might falsely assume HTML::Parser can automatically fall back to HTML::Parser::PurePerl in the absence of a compiler.
+
+=back
+
+=item How do I output my own stuff while traversing the tree?
+
+=over 4
+
+=item The sophisticated way
+
+As always with OO code, sub-class! In this case, you write a new version of the traverse() method.
+
+=item The crude way
+
+Alternately, implement another method in your sub-class, e.g. process(), which recurses like traverse().
+Then call parse() and process().
 
 =back
 
