@@ -148,16 +148,6 @@ sub get_output_dir
 
 # -----------------------------------------------
 
-sub get_result
-{
-	my($self) = @_;
-
-	return $$self{'_result'};
-
-} # End of get_result.
-
-# -----------------------------------------------
-
 sub get_root
 {
 	my($self) = @_;
@@ -423,13 +413,13 @@ sub new
 	 var => 1,
 	};
 	$$self{'_known_tag'} = {%{$$self{'_block'} }, %{$$self{'_close_self'} }, %{$$self{'_empty'} }, %{$$self{'_inline'} } };
+	$$self{'_result'}    = '';
 
 	# Warning: set_node_type() must be called before create_new_node().
 
 	$self -> set_node_type('global');
 	$self -> set_current_node($self -> create_new_node('root', '') );
 	$self -> set_depth(0);
-	$self -> set_result('');
 	$self -> set_root($self -> get_current_node() );
 
 	if ($self -> get_xhtml() )
@@ -704,7 +694,7 @@ sub parse_file
 	}
 
 	open(OUT, "> $output_file_name") || Carp::croak "Can't open(> $output_file_name): $!";
-	print OUT $self -> get_result();
+	print OUT $$self{'_result'};
 	close OUT;
 
 } # End of parse_file.
@@ -738,6 +728,16 @@ sub parse_start_tag
 	$self -> handle_start_tag($tag_name, $attributes, $unary);
 
 } # End of parse_start_tag.
+
+# -----------------------------------------------
+
+sub result
+{
+	my($self) = @_;
+
+	return $$self{'_result'};
+
+} # End of result.
 
 # -----------------------------------------------
 
@@ -826,23 +826,6 @@ sub set_output_dir
 
 # -----------------------------------------------
 
-sub set_result
-{
-	my($self, $result) = @_;
-
-	if (! defined $result)
-	{
-		Carp::croak "set_result() called with undef";
-	}
-
-	$$self{'_result'} = $result;
-
-	return $$self{'_result'};
-
-} # End of set_result.
-
-# -----------------------------------------------
-
 sub set_root
 {
 	my($self, $node) = @_;
@@ -918,7 +901,7 @@ sub traverse
 
 	if ($name ne 'root')
 	{
-		$self -> set_result($self -> get_result() . "<$name$$metadata{'attributes'}>");
+		$$self{'_result'} .= "<$name$$metadata{'attributes'}>";
 	}
 
 	my($index);
@@ -926,7 +909,7 @@ sub traverse
 
 	for $index (0 .. $#child)
 	{
-		$self -> set_result($self -> get_result() . ($index <= $#$content && defined($$content[$index]) ? $$content[$index] : '') );
+		$$self{'_result'} .= $index <= $#$content && defined($$content[$index]) ? $$content[$index] : '';
 		$self -> traverse($child[$index]);
 	}
 
@@ -935,11 +918,11 @@ sub traverse
 
 	$index = $#child + 1;
 
-	$self -> set_result($self -> get_result() . ($index <= $#$content && defined($$content[$index]) ? $$content[$index] : '') );
+	$$self{'_result'} .= $index <= $#$content && defined($$content[$index]) ? $$content[$index] : '';
 
 	if (! $$self{'_empty'}{$name} && ($name ne 'root') )
 	{
-		$self -> set_result($self -> get_result() . "</$name>");
+		$$self{'_result'} .= "</$name>";
 	}
 
 } # End of traverse.
@@ -981,7 +964,7 @@ C<HTML::Parser::Simple> - Parse nice HTML files without needing a compiler
 	
 	$p -> parse('<html>...</html>');
 	$p -> traverse($p -> get_root() );
-	print $p -> get_result();
+	print $p -> result();
 
 =head1 Description
 
@@ -1090,7 +1073,7 @@ Returns the type of the most recently created node, 'global', 'head', or 'body'.
 
 See the first question in the FAQ for details.
 
-=head1 Method: get_result()
+=head1 Method: result()
 
 Returns the result so far of the parse.
 
@@ -1116,7 +1099,7 @@ Otherwise, print nothing.
 
 Parses the string of HTML in $html, and builds a tree of nodes.
 
-After calling C<< $p -> parse() >>, you must call C<< $p -> traverse($p -> get_root() ) >> before calling C<< $p -> get_result() >>.
+After calling C<< $p -> parse() >>, you must call C<< $p -> traverse($p -> get_root() ) >> before calling C<< $p -> result() >>.
 
 Alternately, call C<< $p -> parse_file() >>, which calls all these methods for you.
 
@@ -1125,6 +1108,10 @@ Note: C<parse()> may be called directly or via C<parse_file()>.
 =head1 Method: parse_file($input_file_name, $output_file_name)
 
 Parses the HTML in the input file, and writes the result to the output file.
+
+=head1 Method: result()
+
+Returns the result so far of the parse.
 
 =head1 Method: set_current_node($node)
 
@@ -1157,12 +1144,6 @@ Returns undef.
 Sets the type of the next node to be created, 'global', 'head', or 'body'.
 
 See the first question in the FAQ for details.
-
-Returns undef.
-
-=head1 Method: set_result($string)
-
-Sets the result so far of the parse.
 
 Returns undef.
 

@@ -16,6 +16,4 @@ $parser -> set_xhtml(1);
 $parser -> parse($html);
 $parser -> traverse($parser -> get_root() );
 
-my($result) = $parser -> get_result();
-
-ok($result =~ m/..xml.+?version.+?encoding/, 'XML declaration is preserved');
+ok($parser -> result() =~ m/..xml.+?version.+?encoding/, 'XML declaration is preserved');

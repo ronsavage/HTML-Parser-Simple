@@ -15,6 +15,4 @@ my($parser) = HTML::Parser::Simple -> new();
 $parser -> parse($html);
 $parser -> traverse($parser -> get_root() );
 
-my($result) = $parser -> get_result();
-
-ok($result =~ /Comment/, 'Comments are preserved');
+ok($parser -> result() =~ /Comment/, 'Comments are preserved');
