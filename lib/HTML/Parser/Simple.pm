@@ -1386,6 +1386,10 @@ Then call parse() and process().
 
 =back
 
+=item Is the code on github?
+
+Yes. See: git://github.com/ronsavage/html--parser--simple.git
+
 =back
 
 =head1 Required Modules
