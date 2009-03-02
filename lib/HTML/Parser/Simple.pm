@@ -1390,6 +1390,16 @@ Then call parse() and process().
 
 Yes. See: git://github.com/ronsavage/html--parser--simple.git
 
+=item How is the source formatted?
+
+I edit with Emacs, using the default formatting for Perl.
+
+That means, in general, leading 4-space tabs. Hashrefs use a leading tab and then a space.
+
+All vertical alignment within lines is done manually with spaces.
+
+Perl::Critic is off the agenda.
+
 =back
 
 =head1 Required Modules
