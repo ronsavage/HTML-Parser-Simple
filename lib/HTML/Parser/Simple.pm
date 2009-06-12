@@ -37,7 +37,7 @@ our @EXPORT = qw(
 
 );
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 # -----------------------------------------------
 
@@ -83,7 +83,6 @@ our $VERSION = '1.02';
 sub create_new_node
 {
 	my($self, $name, $attributes, $parent) = @_;
-	my($node)     = Tree::Simple -> new();
 	my($metadata) =
 	{
 		attributes => $attributes,
@@ -1051,7 +1050,7 @@ E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
 
 =head1 Method: get_current_node()
 
-Returns the node which the parser calls the current node.
+Returns the L<Tree::Simple> object which the parser calls the current node.
 
 =head1 Method: get_depth()
 
@@ -1323,7 +1322,7 @@ your preconceptions.
 
 In such cases, do not seek to fix the code. Instead, fix your (faulty) preconceptions, and fix your HTML file.
 
-The 'a' tag, for example, is defined to be an inline tag, but the 'div' tab is a block-level tag.
+The 'a' tag, for example, is defined to be an inline tag, but the 'div' tag is a block-level tag.
 
 I don't define 'a' to be inline, others do, e.g. http://www.w3.org/TR/html401/ and hence HTML::Tagset.
 
