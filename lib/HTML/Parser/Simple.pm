@@ -6,10 +6,9 @@ package HTML::Parser::Simple;
 # Note:
 #	\t = 4 spaces || die.
 
+use 5.006;
 use strict;
 use warnings;
-
-require 5.005_62;
 
 require Exporter;
 
@@ -37,7 +36,7 @@ our @EXPORT = qw(
 
 );
 
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 
 # -----------------------------------------------
 
@@ -602,7 +601,7 @@ sub parse
 
 			$metadata = $self -> get_current_node() -> getNodeValue();
 			$msg      .= "Current tag: <$$metadata{'name'}>. Next 100 chars: " . substr($html, 0, 100);
- 
+
 			Carp::croak $msg;
 		}
 
@@ -938,16 +937,16 @@ C<HTML::Parser::Simple> - Parse nice HTML files without needing a compiler
 =head1 Synopsis
 
 	#!/usr/bin/perl
-	
+
 	use strict;
 	use warnings;
-	
+
 	use HTML::Parser::Simple;
-	
+
 	# -------------------------
-	
+
 	# Method 1:
-	
+
 	my($p) = HTML::Parser::Simple -> new
 	(
 	 {
@@ -955,13 +954,13 @@ C<HTML::Parser::Simple> - Parse nice HTML files without needing a compiler
 		output_dir => '/dest/dir',
 	 }
 	);
-	
+
 	$p -> parse_file('in.html', 'out.html');
-	
+
 	# Method 2:
-	
+
 	my($p) = HTML::Parser::Simple -> new();
-	
+
 	$p -> parse('<html>...</html>');
 	$p -> traverse($p -> get_root() );
 	print $p -> result();

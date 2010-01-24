@@ -25,6 +25,7 @@ WriteMakefile
 	PREREQ_PM =>
 	{
 		Carp         => 0,
+		perl         => 5.006,
 		Test::More   => 0,
 		Test::Pod    => 0,
 		Tree::Simple => 0,

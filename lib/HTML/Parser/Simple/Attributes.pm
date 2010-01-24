@@ -4,7 +4,7 @@ use Carp;
 use strict;
 use warnings;
 
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 
 =head1 NAME
 
@@ -14,11 +14,11 @@ C<HTML::Parser::Simple::Attributes> - a simple HTML attribute parser
 
  my $a_parser = HTML::Parser::Simple::Attributes->new(' height="20" width="20"');
 
- # All the attributes as a hashref 
+ # All the attributes as a hashref
  my $attr_href = $a_parser->get_attr();
 
- # A specific value. 
- my $val       = $self->get_attr('value'); 
+ # A specific value.
+ my $val       = $self->get_attr('value');
 
 =head1 Methods
 
@@ -36,24 +36,24 @@ sub new {
 
 
 =head2 get_attr()
- 
+
  my $attrs_ref = $self->get_attr;
- my $val       = $self->get_attr('value'); 
+ my $val       = $self->get_attr('value');
 
 If you have a start tag, this will return a hash ref with the attribute names as keys and the values as the values.
 
 If you pass in an attribute name, it will return the value for just that attribute.
 
-=cut 
+=cut
 
 # Should also return false if the token is not a start tag, but how?
-# Or perhaps only start tags become nodes? 
+# Or perhaps only start tags become nodes?
 sub get_attr {
     my $self = shift;
-    my $key = shift;    
+    my $key = shift;
 
-    # Only parse each attribute string once. 
-    unless (exists $self->{attrs}) {   
+    # Only parse each attribute string once.
+    unless (exists $self->{attrs}) {
         $self->{attrs} = $self->parse_attributes($self->{a_string});
     }
 
@@ -74,9 +74,9 @@ sub get_attr {
 
 Parses a string of HTML attributes and returns the result as a hash ref, or
 dies if the string is a valid attribute string. Attribute values may be quoted
-with double quotes, single quotes, no quotes if there are no spaces in the value. 
+with double quotes, single quotes, no quotes if there are no spaces in the value.
 
-May also be called as a class method. 
+May also be called as a class method.
 
 =cut
 
@@ -85,10 +85,10 @@ our $squote_re = qr{^([a-zA-Z0-9_-]+)\s*=\s*[']([^']+)[']\s*(.*)$}so; # single q
 our $uquote_re = qr{^([a-zA-Z0-9_-]+)\s*=\s*([^\s'"]+)\s*(.*)$}so; # unquoted
 
 sub parse_attributes {
-    my $self = shift;  
+    my $self = shift;
     my $astring = shift;
 
-    # No attribute string? We're done. 
+    # No attribute string? We're done.
     unless (defined $astring and length $astring) {
         return {};
     }

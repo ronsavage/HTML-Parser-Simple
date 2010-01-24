@@ -14,6 +14,7 @@ my($builder) = Module::Build -> new
 	requires =>
 	{
 		Carp         => 0,
+		perl         => 5.006,
 		Tree::Simple => 0,
 	},
 );
