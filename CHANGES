@@ -3,6 +3,7 @@ Revision history for Perl extension HTML::Parser::Simple.
 1.04  Mon Jan 25 09:37:00 2010
 	- Require Perl 5.6. Thanx to 'cpanservice' via GitHub
 	- Reformat this CHANGES file
+	- Remove trailing spaces from various files
 
 1.03  Fri Jun 12 11:49:00 2009
 	- Improved tests and documentation (Mark Stosberg)
