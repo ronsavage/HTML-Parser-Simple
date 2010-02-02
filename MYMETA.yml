@@ -1,0 +1,23 @@
+---
+abstract: 'Parse nice HTML files without needing a compiler'
+author:
+  - 'Ron Savage <ron@savage.net.au>'
+build_requires:
+  Test::More: 0
+  Test::Pod: 0
+configure_requires:
+  Module::Build: 0.36
+dynamic_config: 0
+generated_by: 'Module::Build version 0.3601'
+license: artistic
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: HTML-Parser-Simple
+requires:
+  Carp: 0
+  Tree::Simple: 0
+  perl: 5.006
+resources:
+  license: http://opensource.org/licenses/artistic-license.php
+version: 1.04

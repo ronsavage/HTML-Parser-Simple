@@ -1,6 +1,7 @@
 Revision history for Perl extension HTML::Parser::Simple.
 
 1.04  Mon Jan 25 09:37:00 2010
+	- Add MANIFEST and MYMETA.yml
 	- Require Perl 5.6. Thanx to 'cpanservice' via GitHub
 	- Reformat this CHANGES file
 	- Remove trailing spaces from various files

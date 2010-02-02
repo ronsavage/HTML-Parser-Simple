@@ -1,0 +1,26 @@
+Build.PL
+Changelog.ini
+CHANGES
+js/htmlparser.js
+lib/HTML/Parser/Simple.pm
+lib/HTML/Parser/Simple/Attributes.pm
+Makefile.PL
+MANIFEST			This list of files
+README
+scripts/parse.html.pl
+scripts/parse.xhtml.pl
+t/00.load.t
+t/01.parse.t
+t/02.comment.t
+t/03.doctype.t
+t/04.parse.error.t
+t/90.xml.declaration.t
+t/Data.pm
+t/data/01.parse.html
+t/data/02.comment.html
+t/data/03.doctype.html
+t/data/04.parse.error.html
+t/data/90.xml.declaration.xhtml
+t/get_current_node.t
+t/parse_attributes.t
+t/pod.t
