@@ -24,3 +24,4 @@ t/data/90.xml.declaration.xhtml
 t/get_current_node.t
 t/parse_attributes.t
 t/pod.t
+META.yml
