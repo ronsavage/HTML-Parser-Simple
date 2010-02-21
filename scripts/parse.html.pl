@@ -13,8 +13,8 @@ use HTML::Parser::Simple;
 my($p) = HTML::Parser::Simple -> new
 (
  {
-	 input_dir  => '/home/ron/httpd/prefork/htdocs',
-	 output_dir => '/home/ron/httpd/prefork/htdocs',
+	 input_dir  => '/var/www',
+	 output_dir => '/tmp',
 	 verbose    => 1,
  }
 );

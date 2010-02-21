@@ -1400,16 +1400,6 @@ Perl::Critic is off the agenda.
 
 =back
 
-=head1 Required Modules
-
-=over 4
-
-=item Carp
-
-=item Tree::Simple
-
-=back
-
 =head1 Credits
 
 This Perl HTML parser has been converted from a JavaScript one written by John Resig.
