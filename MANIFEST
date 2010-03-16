@@ -6,6 +6,7 @@ lib/HTML/Parser/Simple.pm
 lib/HTML/Parser/Simple/Attributes.pm
 Makefile.PL
 MANIFEST			This list of files
+META.yml
 README
 scripts/parse.html.pl
 scripts/parse.xhtml.pl
@@ -24,4 +25,3 @@ t/data/90.xml.declaration.xhtml
 t/get_current_node.t
 t/parse_attributes.t
 t/pod.t
-META.yml

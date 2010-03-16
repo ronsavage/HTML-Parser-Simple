@@ -17,14 +17,14 @@ name: HTML-Parser-Simple
 provides:
   HTML::Parser::Simple:
     file: lib/HTML/Parser/Simple.pm
-    version: 1.04
+    version: 1.05
   HTML::Parser::Simple::Attributes:
     file: lib/HTML/Parser/Simple/Attributes.pm
-    version: 1.04
+    version: 1.05
 requires:
   Carp: 0
   Tree::Simple: 0
   perl: 5.006
 resources:
   license: http://opensource.org/licenses/artistic-license.php
-version: 1.04
+version: 1.05
