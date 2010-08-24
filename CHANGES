@@ -3,8 +3,6 @@ Revision history for Perl extension HTML::Parser::Simple.
 1.05  Sun Feb 21 12:55:17 2010
 	- Remove text 'All rights reserved' (for Debian licensing).
 	- Remove POD heads 'Required Modules' and 'Changes'.
-	- Replace personal doc root with /var/www.
-	- Use namespace::autoclean with Moose.
 
 1.04  Mon Jan 25 09:37:00 2010
 	- Add MANIFEST and MYMETA.yml
