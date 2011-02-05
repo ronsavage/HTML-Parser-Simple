@@ -11,6 +11,10 @@ my($builder) = Module::Build -> new
 		Test::More => 0,
 		Test::Pod  => 0,
 	},
+ configure_requires =>
+ {
+   Module::Build => 0.36,
+ },
 	requires =>
 	{
 		Carp         => 0,
