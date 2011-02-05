@@ -1,10 +1,84 @@
 package HTML::Parser::Simple::Attributes;
 
-use Carp;
 use strict;
 use warnings;
 
+use Carp;
+
 our $VERSION = '1.05';
+
+# -----------------------------------------------
+
+sub get_attr
+{
+	my($self, $key) = @_;
+
+	# Only parse each attribute string once.
+
+	if (! exists $$self{attrs})
+	{
+		$$self{attrs} = $self -> parse_attributes($$self{a_string});
+	}
+
+	return $key ? $$self{attrs}{$key} : $$self{attrs};
+
+} # End of get_attr.
+
+# -----------------------------------------------
+
+sub new
+{
+	my($class, $a_string) = @_;
+
+	return bless({a_string => $a_string}, $class);
+
+} # End of new.
+
+# -----------------------------------------------
+
+our(@quote) =
+(
+ qr{^([a-zA-Z0-9_-]+)\s*=\s*["]([^"]+)["]\s*(.*)$}so, # Double quotes.
+ qr{^([a-zA-Z0-9_-]+)\s*=\s*[']([^']+)[']\s*(.*)$}so, # Single quotes.
+ qr{^([a-zA-Z0-9_-]+)\s*=\s*([^\s'"]+)\s*(.*)$}so,    # Unquoted.
+);
+
+sub parse_attributes
+{
+	my($self, $a_string) = @_;
+	$a_string  =~ s/^\s+|\s+$//g;
+	my($attrs) = {};
+
+	while (length $a_string)
+	{
+		my($i)        = - 1;
+		my($original) = $a_string;
+
+		while ($i < $#quote)
+		{
+			$i++;
+
+			if ($a_string =~ $quote[$i])
+			{
+				$$attrs{$1} = $2;
+				$a_string   = $3;
+				$i          = - 1;
+			}
+		}
+
+		if ($a_string eq $original)
+		{
+			croak "parse_attributes: can't parse $a_string - not a properly formed attribute string";
+		}
+	}
+
+	return $attrs;
+
+} # End of parse_attributes.
+
+# -----------------------------------------------
+
+1;
 
 =head1 NAME
 
@@ -12,112 +86,48 @@ C<HTML::Parser::Simple::Attributes> - a simple HTML attribute parser
 
 =head1 Synopsis
 
- my $a_parser = HTML::Parser::Simple::Attributes->new(' height="20" width="20"');
+Note: This module assumes the attributes belong to a start tag.
 
- # All the attributes as a hashref
- my $attr_href = $a_parser->get_attr();
+	my($parser) = HTML::Parser::Simple::Attributes -> new(' height="20" width="20"');
 
- # A specific value.
- my $val       = $self->get_attr('value');
+	# Get all the attributes as a hashref.
+
+	my($attr_href) = $parser -> get_attr;
+
+	# Get the value of a specific attribute.
+
+	my($height) = $parser -> get_attr('height');
 
 =head1 Methods
 
-=cut
+=head2 get_attr([$name])
 
-sub new {
-    my $class = shift;
-    my $a_string = shift;
-    my $self  = {};
-    $self->{a_string}   = $a_string;
-    bless ($self, $class);
-    return $self;
+The [] indicate an optional parameter.
 
-}
+	my($attrs_ref) = $parser -> get_attr;
+	my($val)       = $parser -> get_attr('attr_name');
 
-
-=head2 get_attr()
-
- my $attrs_ref = $self->get_attr;
- my $val       = $self->get_attr('value');
-
-If you have a start tag, this will return a hash ref with the attribute names as keys and the values as the values.
+If you don't pass in an attribute name, returns a hash ref with the attribute names as keys and the attribute values
+as the values.
 
 If you pass in an attribute name, it will return the value for just that attribute.
 
-=cut
+Return undef if you supply the name of a non-existant attribute.
 
-# Should also return false if the token is not a start tag, but how?
-# Or perhaps only start tags become nodes?
-sub get_attr {
-    my $self = shift;
-    my $key = shift;
+=head2 parse_attributes($attr_string)
 
-    # Only parse each attribute string once.
-    unless (exists $self->{attrs}) {
-        $self->{attrs} = $self->parse_attributes($self->{a_string});
-    }
-
-    if ($key) {
-        # XXX Check to see if the key exists first?
-        return $self->{attrs}{$key};
-    }
-    else {
-        return $self->{attrs};
-    }
-
-}
-
-=head2 parse_attributes
-
- $attr_href = $self->parse_attributes($attr_string);
- $attr_href = HTML::Parser::Simple::Attributes->parse_attributes($attr_string);
+	$attr_href = $parser -> parse_attributes($attr_string);
+	$attr_href = HTML::Parser::Simple::Attributes -> parse_attributes($attr_string);
 
 Parses a string of HTML attributes and returns the result as a hash ref, or
 dies if the string is a valid attribute string. Attribute values may be quoted
-with double quotes, single quotes, no quotes if there are no spaces in the value.
+with double quotes or single quotes.
 
-May also be called as a class method.
+Quotes may be omitted if there are no spaces in the value.
 
-=cut
+Returns an empty hashref if $attr_string is not supplied.
 
-our $quote_re  = qr{^([a-zA-Z0-9_-]+)\s*=\s*["]([^"]+)["]\s*(.*)$}so; # regular quotes
-our $squote_re = qr{^([a-zA-Z0-9_-]+)\s*=\s*[']([^']+)[']\s*(.*)$}so; # single quotes
-our $uquote_re = qr{^([a-zA-Z0-9_-]+)\s*=\s*([^\s'"]+)\s*(.*)$}so; # unquoted
-
-sub parse_attributes {
-    my $self = shift;
-    my $astring = shift;
-
-    # No attribute string? We're done.
-    unless (defined $astring and length $astring) {
-        return {};
-    }
-
-    my %attrs;
-
-    # trim leading and trailing whitespace.
-    # XXX faster as two REs?
-    $astring =~ s/^\s+|\s+$//g;
-
-    my $org = $astring;
-    while (length $astring) {
-        for my  $m ($quote_re, $squote_re, $uquote_re) {
-            if ($astring =~ $m) {
-                my ($var,$val,$suffix) = ($1,$2,$3);
-                $attrs{$var} = $val;
-                $astring = $suffix;
-            }
-        }
-        if ($astring eq $org) {
-            croak "parse_attributes: can't parse $astring - not a properly formed attribute string"
-        }
-
-    }
-
-    return \%attrs;
-}
-
-
+This method may also be called as a class method.
 
 =head1 Author
 
@@ -135,7 +145,3 @@ Copyright (c) 2009 Mark Stosberg.
 	http://www.opensource.org/licenses/index.html
 
 =cut
-
-
-
-1;
