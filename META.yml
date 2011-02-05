@@ -7,7 +7,7 @@ build_requires:
   Test::Pod: 0
 configure_requires:
   Module::Build: 0.36
-generated_by: 'Module::Build version 0.3607'
+generated_by: 'Module::Build version 0.3624'
 license: artistic
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,14 +16,14 @@ name: HTML-Parser-Simple
 provides:
   HTML::Parser::Simple:
     file: lib/HTML/Parser/Simple.pm
-    version: 1.05
+    version: 1.06
   HTML::Parser::Simple::Attributes:
     file: lib/HTML/Parser/Simple/Attributes.pm
-    version: 1.05
+    version: 1.06
 requires:
   Carp: 0
   Tree::Simple: 0
   perl: 5.006
 resources:
   license: http://www.perlfoundation.org/artistic_license_1_0
-version: 1.05
+version: 1.06
