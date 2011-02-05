@@ -22,6 +22,7 @@ t/data/02.comment.html
 t/data/03.doctype.html
 t/data/04.parse.error.html
 t/data/90.xml.declaration.xhtml
+t/empty_attribute.t
 t/get_current_node.t
 t/parse_attributes.t
 t/pod.t
