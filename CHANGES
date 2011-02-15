@@ -1,5 +1,9 @@
 Revision history for Perl extension HTML::Parser::Simple.
 
+1.07  Tue Feb 15 17:02:00 2011
+	- Replace /usr/bin/perl with /usr/bin/env perl.
+	- Replace common::sense with use strict and use warnings, to get uninit var warnings.
+
 1.06  Sat Feb  5 15:57:00 2011
 	- Fix a bug where, if the 2nd or subsequent attribute had an empty string for the value,
 	  the code looped forever. Eg: name="a name" value="". For RT#65466.

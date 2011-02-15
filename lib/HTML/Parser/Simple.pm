@@ -36,7 +36,7 @@ our @EXPORT = qw(
 
 );
 
-our $VERSION = '1.06';
+our $VERSION = '1.07';
 
 # -----------------------------------------------
 
@@ -936,7 +936,7 @@ C<HTML::Parser::Simple> - Parse nice HTML files without needing a compiler
 
 =head1 Synopsis
 
-	#!/usr/bin/perl
+	#!/usr/bin/env perl
 
 	use strict;
 	use warnings;
