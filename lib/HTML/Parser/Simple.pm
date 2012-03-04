@@ -932,7 +932,7 @@ sub traverse
 
 =head1 NAME
 
-C<HTML::Parser::Simple> - Parse nice HTML files without needing a compiler
+HTML::Parser::Simple - Parse nice HTML files without needing a compiler
 
 =head1 Synopsis
 
