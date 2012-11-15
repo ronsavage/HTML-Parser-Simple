@@ -4,7 +4,7 @@
       "Ron Savage <ron@savage.net.au>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.110580",
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120630",
    "license" : [
       "artistic_1"
    ],
@@ -16,8 +16,8 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Test::More" : 0,
-            "Test::Pod" : 0
+            "Test::More" : "0",
+            "Test::Pod" : "0"
          }
       },
       "configure" : {
@@ -27,8 +27,8 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : 0,
-            "Tree::Simple" : 0,
+            "Carp" : "0",
+            "Tree::Simple" : "0",
             "perl" : "5.006"
          }
       }

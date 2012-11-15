@@ -7,7 +7,8 @@ build_requires:
   Test::Pod: 0
 configure_requires:
   Module::Build: 0.36
-generated_by: 'Module::Build version 0.3603'
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120630'
 license: artistic
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -25,5 +26,5 @@ requires:
   Tree::Simple: 0
   perl: 5.006
 resources:
-  license: http://opensource.org/licenses/artistic-license.php
+  license: http://www.perlfoundation.org/artistic_license_1_0
 version: 1.06
