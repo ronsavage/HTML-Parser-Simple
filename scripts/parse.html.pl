@@ -13,8 +13,8 @@ use HTML::Parser::Simple;
 my($p) = HTML::Parser::Simple -> new
 (
  {
-	 input_dir  => '/home/ron',
-	 output_dir => '/home/ron',
+	 input_dir  => '/var/www',
+	 output_dir => '/tmp',
 	 verbose    => 1,
  }
 );
