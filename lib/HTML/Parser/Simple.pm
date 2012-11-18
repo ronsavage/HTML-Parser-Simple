@@ -1400,9 +1400,11 @@ Then call parse() and process().
 
 Yes. See: git://github.com/ronsavage/html--parser--simple.git
 
-=item How is the source formatted?
+=head2 How is the source formatted?
 
 I edit with Emacs, using the default formatting for Perl.
+
+Stop press! I now use UltraEdit, but the formatting should be exactly the same.
 
 That means, in general, leading 4-space tabs. Hashrefs use a leading tab and then a space.
 
