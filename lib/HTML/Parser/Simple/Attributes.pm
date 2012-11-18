@@ -86,7 +86,7 @@ C<HTML::Parser::Simple::Attributes> - a simple HTML attribute parser
 
 =head1 Synopsis
 
-Note: This module assumes the attributes belong to a start tag.
+Note: This example assumes the attributes belong to a start tag.
 
 	my($parser) = HTML::Parser::Simple::Attributes -> new(' height="20" width="20"');
 
@@ -120,7 +120,7 @@ Return undef if you supply the name of a non-existant attribute.
 	$attr_href = HTML::Parser::Simple::Attributes -> parse_attributes($attr_string);
 
 Parses a string of HTML attributes and returns the result as a hash ref, or
-dies if the string is a valid attribute string. Attribute values may be quoted
+dies if the string is not a valid attribute string. Attribute values may be quoted
 with double quotes or single quotes.
 
 Quotes may be omitted if there are no spaces in the value.
