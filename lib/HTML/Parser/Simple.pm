@@ -423,7 +423,8 @@ sub new
 
 	if ($self -> get_xhtml() )
 	{
-		# Compared to the non-XHTML re, this has a extra  ':' just under that ':'.
+		# Note: This code is repeated in set_xhtml().
+		# Compared to the non-XHTML re, this has a extra  ':' directly under that ':'.
 
 		$$self{'_tag_with_attribute'} = q#^(<(\w+)((?:\s+[-:\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)#;
 	}
@@ -878,7 +879,8 @@ sub set_xhtml
 
 	if ($self -> get_xhtml() )
 	{
-		# Compared to the non-XHTML re, this has a extra  ':' just under the ':'.
+		# Note: This code is repeated in new().
+		# Compared to the non-XHTML re, this has a extra  ':' directly under that ':'.
 
 		$$self{'_tag_with_attribute'} = q#^(<(\w+)((?:\s+[-:\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)#;
 	}
@@ -1004,19 +1006,19 @@ Available options:
 
 =over 4
 
-=item input_dir
+=item o input_dir
 
 This takes the path where the input file is to read from.
 
 The default value is '' (the empty string).
 
-=item output_dir
+=item o output_dir
 
 This takes the path where the output file is to be written.
 
 The default value is '' (the empty string).
 
-=item verbose
+=item o verbose
 
 This takes either a 0 or a 1.
 
@@ -1026,7 +1028,7 @@ The default value is 0.
 
 Note: Currently, setting verbose does nothing.
 
-=item xhtml
+=item o xhtml
 
 This takes either a 0 or a 1.
 
@@ -1041,11 +1043,11 @@ Warning: The only XHTML changes to this code, so far, are:
 
 =over 4
 
-=item Accept the XML declaration
+=item o Accept the XML declaration
 
 E.g.: <?xml version="1.0" standalone='yes'?>.
 
-=item Accept attribute names containing the ':' char
+=item o Accept attribute names containing the ':' char
 
 E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
 
@@ -1175,7 +1177,7 @@ The data of each node is a hash ref. The keys/values of this hash ref are:
 
 =over 4
 
-=item attributes
+=item o attributes
 
 This is the string of HTML attributes associated with the HTML tag.
 
@@ -1186,7 +1188,7 @@ So, <table align = 'center' summary = 'Body'> will have an attributes string of
 
 Note the leading space.
 
-=item content
+=item o content
 
 This is an array ref of bits and pieces of content.
 
@@ -1212,7 +1214,7 @@ but before the current node is closed.
 
 Note: The DOCTYPE declaration is stored as the 0th element of the content of the root node.
 
-=item depth
+=item o depth
 
 The nesting depth of the tag within the document.
 
@@ -1220,7 +1222,7 @@ The root is at depth 0, '<html>' is at depth 1, '<head>' and '<body>' are a dept
 
 It's just there in case you need it.
 
-=item The name the HTML tag
+=item o name
 
 So, the tag '<html>' will mean the name is 'html'.
 
@@ -1230,7 +1232,7 @@ The root of the tree is called 'root', and holds the DOCTYPE, if any, as content
 
 The root has the node 'html' as the only child, of course.
 
-=item node_type
+=item o node_type
 
 This holds 'global' before '<head>' and between '</head>' and '<body>', and after '</body>'.
 
@@ -1292,27 +1294,27 @@ Note: There are quite a few files involved. Proceed with caution.
 
 =over 4
 
-=item Select a HTML file to test
+=item o Select a HTML file to test
 
 Call this input.html.
 
-=item Run input.html thru reveal.pl
+=item o Run input.html thru reveal.pl
 
 Reveal.pl ships with HTML::Revelation.
 
 Call the output file output.1.html.
 
-=item Run input.html thru parse.html.pl
+=item o Run input.html thru parse.html.pl
 
-Parse.html.pl ships with HTML::Parser::Simple.
+parse.html.pl ships with HTML::Parser::Simple.
 
 Call the output file parsed.html.
 
-=item Run parsed.html thru reveal.pl
+=item o Run parsed.html thru reveal.pl
 
 Call the output file output.2.html.
 
-=item Compare output.1.html and output.2.html
+=item o Compare output.1.html and output.2.html
 
 If they match, or even if they don't match, you're finished.
 
@@ -1369,13 +1371,13 @@ Stop press: As an experiment I switched to Tree::Simple. Since it also works I'l
 
 =over 4
 
-=item The API
+=item o The API
 
 That name sounds like a pure Perl version of the same API as used by HTML::Parser.
 
 But the API's are not, and are not meant to be, compatible.
 
-=item The tie-in
+=item o The tie-in
 
 Some people might falsely assume HTML::Parser can automatically fall back to HTML::Parser::PurePerl in the absence of a compiler.
 
@@ -1385,11 +1387,11 @@ Some people might falsely assume HTML::Parser can automatically fall back to HTM
 
 =over 4
 
-=item The sophisticated way
+=item o The sophisticated way
 
 As always with OO code, sub-class! In this case, you write a new version of the traverse() method.
 
-=item The crude way
+=item o The crude way
 
 Alternately, implement another method in your sub-class, e.g. process(), which recurses like traverse().
 Then call parse() and process().
