@@ -1053,77 +1053,75 @@ E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
 
 =back
 
-=head1 Method: get_current_node()
+=head1 Methods
+
+=head2 get_current_node()
 
 Returns the L<Tree::Simple> object which the parser calls the current node.
 
-=head1 Method: get_depth()
+=head2 get_depth()
 
 Returns the nesting depth of the current tag.
 
 It's just there in case you need it.
 
-=head1 Method: get_input_dir()
+=head2 get_input_dir()
 
 Returns the input_dir parameter, as passed in to C<new()>.
 
-=head1 Method: get_output_dir()
+=head2 get_output_dir()
 
 Returns the output_dir parameter, as passed in to C<new()>.
 
-=head1 Method: get_node_type()
+=head2 get_node_type()
 
 Returns the type of the most recently created node, 'global', 'head', or 'body'.
 
 See the first question in the FAQ for details.
 
-=head1 Method: result()
-
-Returns the result so far of the parse.
-
-=head1 Method: get_root()
+=head2 get_root()
 
 Returns the node which the parser calls the root of the tree of nodes.
 
-=head1 Method: get_verbose()
+=head2 get_verbose()
 
 Returns the verbose parameter, as passed in to C<new()>.
 
-=head1 Method: get_xhtml()
+=head2 get_xhtml()
 
 Returns the xhtml parameter, as passed in to C<new()>.
 
-=head1 Method: log($msg)
+=head2 log($msg)
 
 Print $msg to STDERR if C<new()> was called as C<< new({verbose => 1}) >>, or if $p -> set_verbose(1) was called.
 
 Otherwise, print nothing.
 
-=head1 Method: parse($html)
+=head2 parse($html)
 
 Parses the string of HTML in $html, and builds a tree of nodes.
 
 After calling C<< $p -> parse() >>, you must call C<< $p -> traverse($p -> get_root() ) >> before calling C<< $p -> result() >>.
 
-Alternately, call C<< $p -> parse_file() >>, which calls all these methods for you.
+Alternately, use C<< $p -> parse_file() >>, which calls all these methods for you.
 
 Note: C<parse()> may be called directly or via C<parse_file()>.
 
-=head1 Method: parse_file($input_file_name, $output_file_name)
+=head2 parse_file($input_file_name, $output_file_name)
 
 Parses the HTML in the input file, and writes the result to the output file.
 
-=head1 Method: result()
+=head2 result()
 
 Returns the result so far of the parse.
 
-=head1 Method: set_current_node($node)
+=head2 set_current_node($node)
 
 Sets the node which the parser calls the current node.
 
 Returns undef.
 
-=head1 Method: set_depth($depth)
+=head2 set_depth($depth)
 
 Sets the nesting depth of the current node.
 
@@ -1131,19 +1129,19 @@ Returns undef.
 
 It's just there in case you need it.
 
-=head1 Method: set_input_dir($dir_name)
+=head2 set_input_dir($dir_name)
 
 Sets the input_dir parameter, as though it was passed in to C<new()>.
 
 Returns undef.
 
-=head1 Method: set_output_dir($dir_name)
+=head2 set_output_dir($dir_name)
 
 Sets the output_dir parameter, as though it was passed in to C<new()>.
 
 Returns undef.
 
-=head1 Method: set_node_type($node_type)
+=head2 set_node_type($node_type)
 
 Sets the type of the next node to be created, 'global', 'head', or 'body'.
 
@@ -1151,19 +1149,19 @@ See the first question in the FAQ for details.
 
 Returns undef.
 
-=head1 Method: set_root($node)
+=head2 set_root($node)
 
 Returns the node which the parser calls the root of the tree of nodes.
 
 Returns undef.
 
-=head1 Method: set_verbose($Boolean)
+=head2 set_verbose($Boolean)
 
 Sets the verbose parameter, as though it was passed in to C<new()>.
 
 Returns undef.
 
-=head1 Method: set_xhtml($Boolean)
+=head2 set_xhtml($Boolean)
 
 Sets the xhtml parameter, as though it was passed in to C<new()>.
 
@@ -1171,9 +1169,7 @@ Returns undef.
 
 =head1 FAQ
 
-=over 4
-
-=item What is the format of the data stored in each node of the tree?
+=head2 What is the format of the data stored in each node of the tree?
 
 The data of each node is a hash ref. The keys/values of this hash ref are:
 
@@ -1183,8 +1179,10 @@ The data of each node is a hash ref. The keys/values of this hash ref are:
 
 This is the string of HTML attributes associated with the HTML tag.
 
+Attributes are stored in lower-case.
+
 So, <table align = 'center' summary = 'Body'> will have an attributes string of
-" align = 'center' summary = 'Body'".
+" align = 'center' summary = 'body'".
 
 Note the leading space.
 
@@ -1226,6 +1224,8 @@ It's just there in case you need it.
 
 So, the tag '<html>' will mean the name is 'html'.
 
+Tag names are stored in lower-case.
+
 The root of the tree is called 'root', and holds the DOCTYPE, if any, as content.
 
 The root has the node 'html' as the only child, of course.
@@ -1240,37 +1240,43 @@ It's just there in case you need it.
 
 =back
 
-=item How are HTML comments handled?
+=head2 How are tags and attributes handled?
+
+They are stored in lower-case in a tree managed by L<Tree::Simple>.
+
+The root of the tree is returned be L</get_root()>.
+
+=head2 How are HTML comments handled?
 
 They are treated as content. This includes the prefix '<!--' and the suffix '-->'.
 
-=item How is DOCTYPE handled?
+=head2 How is DOCTYPE handled?
 
 It is treated as content belonging to the root of the tree.
 
-=item How is the XML declaration handled?
+=head2 How is the XML declaration handled?
 
 It is treated as content belonging to the root of the tree.
 
-=item Does this module handle all HTML pages?
+=head2 Does this module handle all HTML pages?
 
 No, never.
 
-=item Which versions of HTML does this module handle?
+=head2 Which versions of HTML does this module handle?
 
 Up to V 4.
 
-=item What do I do if this module does not handle my HTML page?
+=head2 What do I do if this module does not handle my HTML page?
 
 Make yourself a nice cup of tea, and then fix your page.
 
-=item Does this validate the HTML input?
+=head2 Does this validate the HTML input?
 
 No.
 
 For example, if you feed in a HTML page without the title tag, this module does not care.
 
-=item How do I view the output HTML?
+=head2 How do I view the output HTML?
 
 By installing HTML::Revelation, of course!
 
@@ -1278,7 +1284,7 @@ Sample output:
 
 http://savage.net.au/Perl-modules/html/CreateTable.html
 
-=item How do I test this module (or my file)?
+=head2 How do I test this module (or my file)?
 
 Suggested steps:
 
@@ -1312,7 +1318,7 @@ If they match, or even if they don't match, you're finished.
 
 =back
 
-=item Will you implement a 'quirks' mode to handle my special HTML file?
+=head2 Will you implement a 'quirks' mode to handle my special HTML file?
 
 No, never.
 
@@ -1320,7 +1326,7 @@ Help with quirks:
 
 http://www.quirksmode.org/sitemap.html
 
-=item Is there anything I should be aware of?
+=head2 Is there anything I should be aware of?
 
 Yes. If your HTML file is not nice, the interpretation of tag nesting will not match
 your preconceptions.
@@ -1351,7 +1357,7 @@ Of course, this is just one of a vast set of possible problems.
 
 You have been warned.
 
-=item Why did you use Tree::Simple but not Tree or Tree::Fast or Tree::DAG_Node?
+=head2 Why did you use Tree::Simple but not Tree or Tree::Fast or Tree::DAG_Node?
 
 During testing, Tree::Fast crashed, so I replaced it with Tree and everything worked. Spooky.
 
@@ -1359,7 +1365,7 @@ Late news: Tree does not cope with an array ref stored in the metadata, so I've 
 
 Stop press: As an experiment I switched to Tree::Simple. Since it also works I'll just keep using it.
 
-=item Why isn't this module called HTML::Parser::PurePerl?
+=head2 Why isn't this module called HTML::Parser::PurePerl?
 
 =over 4
 
@@ -1375,7 +1381,7 @@ Some people might falsely assume HTML::Parser can automatically fall back to HTM
 
 =back
 
-=item How do I output my own stuff while traversing the tree?
+=head2 How do I output my own stuff while traversing the tree?
 
 =over 4
 
@@ -1390,7 +1396,7 @@ Then call parse() and process().
 
 =back
 
-=item Is the code on github?
+=head2 Is the code on github?
 
 Yes. See: git://github.com/ronsavage/html--parser--simple.git
 
@@ -1403,8 +1409,6 @@ That means, in general, leading 4-space tabs. Hashrefs use a leading tab and the
 All vertical alignment within lines is done manually with spaces.
 
 Perl::Critic is off the agenda.
-
-=back
 
 =head1 Credits
 

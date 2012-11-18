@@ -7,6 +7,7 @@ Revision history for Perl extension HTML::Parser::Simple.
 		This lead to the error: Can't locate object method "getParent" via package "root"...
 		Due to the fix, the code now outputs all tags and attributes as lower-case.
 		Thanx to Satya Nemana for reporting this problem (via private email).
+	- Clean up the POD.
 
 1.06  Sat Feb  5 15:57:00 2011
 	- Fix a bug where, if the 2nd or subsequent attribute had an empty string for the value,
