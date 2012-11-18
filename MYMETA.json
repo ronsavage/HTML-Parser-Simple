@@ -36,11 +36,11 @@
    "provides" : {
       "HTML::Parser::Simple" : {
          "file" : "lib/HTML/Parser/Simple.pm",
-         "version" : "1.06"
+         "version" : "1.07"
       },
       "HTML::Parser::Simple::Attributes" : {
          "file" : "lib/HTML/Parser/Simple/Attributes.pm",
-         "version" : "1.06"
+         "version" : "1.07"
       }
    },
    "release_status" : "stable",
@@ -49,5 +49,5 @@
          "http://www.perlfoundation.org/artistic_license_1_0"
       ]
    },
-   "version" : "1.06"
+   "version" : "1.07"
 }
