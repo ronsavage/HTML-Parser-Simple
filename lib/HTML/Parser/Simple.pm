@@ -36,7 +36,7 @@ our @EXPORT = qw(
 
 );
 
-our $VERSION = '1.06';
+our $VERSION = '1.07';
 
 # -----------------------------------------------
 
@@ -418,12 +418,12 @@ sub new
 
 	$self -> set_depth(0);
 	$self -> set_node_type('global');
-	$self -> set_current_node($self -> create_new_node('root', '') );
+	$self -> set_current_node($self -> create_new_node('root', '', Tree::Simple -> ROOT) );
 	$self -> set_root($self -> get_current_node() );
 
 	if ($self -> get_xhtml() )
 	{
-		# Compared to the non-XHTML re, this has a extra  ':' just under the ':'.
+		# Compared to the non-XHTML re, this has a extra  ':' just under that ':'.
 
 		$$self{'_tag_with_attribute'} = q#^(<(\w+)((?:\s+[-:\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)#;
 	}
@@ -482,7 +482,9 @@ sub parse
 			{
 				if (substr($html, 0, 1) eq '<')
 				{
-					if ($html =~ /$$self{'_tag_with_attribute'}/)
+					# Warning: lc() means all tags and attributes are captured in lc.
+
+					if (lc($html) =~ /$$self{'_tag_with_attribute'}/)
 					{
 						substr($html, 0, length $1) = '';
 						$in_content                 = 0;
@@ -574,7 +576,9 @@ sub parse
 		{
 			my($re) = "(.*)<\/$stack[$#stack]\[^>]*>";
 
-			if ($html =~ /$re/s)
+			# lc() is needed because only lc tag names are pushed onto the stack.
+
+			if (lc($html) =~ /$re/s)
 			{
 				my($text) = $1;
 				$text     =~ s/<!--(.*?)-->/$1/g;
@@ -619,6 +623,7 @@ sub parse
 sub parse_end_tag
 {
 	my($self, $tag_name, $stack) = @_;
+	$tag_name = lc $tag_name;
 
 	# Find the closest opened tag of the same name.
 
@@ -703,6 +708,7 @@ sub parse_file
 sub parse_start_tag
 {
 	my($self, $tag_name, $attributes, $unary, $stack) = @_;
+	$tag_name = lc $tag_name;
 
 	if ($$self{'_block'}{$tag_name})
 	{
