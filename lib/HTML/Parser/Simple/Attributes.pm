@@ -6,7 +6,7 @@ has attribute_hashref => (default => sub{return {} });
 has attribute_string  => (default => sub{return ''});
 has parsed            => (default => sub{return 0});
 
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 # -----------------------------------------------
 

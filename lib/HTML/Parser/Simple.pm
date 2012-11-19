@@ -23,7 +23,7 @@ has tagged_attribute => ();
 has verbose          => ();
 has xhtml            => ();
 
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 # -----------------------------------------------
 

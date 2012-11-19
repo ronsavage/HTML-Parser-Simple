@@ -5,7 +5,7 @@ use warnings;
 
 use Moos;
 
-our $VERSION = '1.06';
+our $VERSION = '1.08';
 
 # -----------------------------------------------
 
