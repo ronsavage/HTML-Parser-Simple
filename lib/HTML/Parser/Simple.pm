@@ -552,6 +552,8 @@ sub parse_file
 	$input_file_name  ||= $self -> input_file;
 	$output_file_name ||= $self -> output_file;
 
+	$self -> input_file($input_file_name);
+	$self -> output_file($output_file_name);
 	$self -> log("Reading $input_file_name");
 
 	open(INX, $input_file_name) || die "Can't open($input_file_name): $!\n";
@@ -717,6 +719,8 @@ Of course, these can be abbreviated by using method chaining. E.g. Method 2 coul
 
 	HTML::Parser::Simple -> new -> parse_file('data/s.1.html', 'data/s.2.html');
 
+See scripts/parse.html.pl and scripts/parse.xhtml.pl.
+
 =head1 Description
 
 C<HTML::Parser::Simple> is a pure Perl module.
@@ -801,7 +805,7 @@ E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
 
 =head2 block()
 
-Returns a hashref where the keys are the names of HTML tags of type block.
+Returns a hashref where the keys are the names of block-level HTML tags.
 
 The corresponding values in the hashref are just 1.
 
@@ -893,9 +897,13 @@ Parses the HTML in the input file, and writes the result to the output file.
 
 C<< parse_file() >> calls L</parse($html)> and L</traverse($node)>, using C<< $p -> root >> for $node.
 
-Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
+Note: The parameters passed in to C<< parse_file($input_file_name, $output_file_name) >>, take precedence over the
 I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over the internal values set with
 C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
+
+Lastly, the parameters passed in to C<< parse_file($input_file_name, $output_file_name) >> are used to update
+the internal values set with the I<input_file> and I<output_file> parameters passed in to C<< new() >>,
+or set with calls to C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
 
 =head2 result()
 
@@ -957,7 +965,7 @@ You normally call this as C<< $p -> traverse($p -> root) >>, to ensure all nodes
 
 See the L</Synopsis> for sample code.
 
-Or, see scripts/parse.attributes.pl, which uses L<HTML::Parser::Simple::Reporter>, and calls C<< traverse($node) >>
+Or, see scripts/traverse.file.pl, which uses L<HTML::Parser::Simple::Reporter>, and calls C<< traverse($node) >>
 via L<HTML::Parser::Simple::Reporter/traverse_file($input_file_name)>.
 
 =head2 verbose($Boolean)

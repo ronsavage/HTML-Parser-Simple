@@ -1,10 +1,10 @@
 package HTML::Parser::Simple::Reporter;
 
-use parent 'HTML::Parser::Simple';
-
 use HTML::Parser::Simple::Attributes;
 
 use Moos; # Turns on strict and warnings. Provides 'has'.
+
+extends 'HTML::Parser::Simple';
 
 our $VERSION = '2.00';
 
@@ -25,7 +25,7 @@ sub traverse
 	{
 		my($s) = ('  ' x ($depth - 1) ) . "$name. Attributes: ";
 		my($p) = HTML::Parser::Simple::Attributes -> new;
-		my($a) = $p -> parse_attributes($$metadata{attributes});
+		my($a) = $p -> parse($$metadata{attributes});
 		$s     .= $p -> hashref2string($a);
 		my($c) = '';
 
@@ -36,7 +36,7 @@ sub traverse
 
 		$c =~ s/^\s+//;
 		$c =~ s/\s+$//;
-		$s .= ". Content: $c.";
+		$s .= ". Content: $c";
 
 		push @$output, $s;
 	}
@@ -55,6 +55,7 @@ sub traverse_file
 	my($self, $input_file_name) = @_;
 	$input_file_name  ||= $self -> input_file;
 
+	$self -> input_file($input_file_name);
 	$self -> log("Reading $input_file_name");
 
 	open(INX, $input_file_name) || Carp::croak "Can't open($input_file_name): $!";
@@ -93,37 +94,38 @@ HTML::Parser::Simple::Reporter - A sub-class of HTML::Parser::Simple
 	use strict;
 	use warnings;
 
-	use HTML::Parser::Simple;
+	use HTML::Parser::Simple::Reporter;
 
 	# -------------------------
 
 	# Method 1:
 
-	my($p) = HTML::Parser::Simple -> new
-	(
-	 {
-		input_dir  => '/source/dir',
-		output_dir => '/dest/dir',
-	 }
-	);
+	my($p) = HTML::Parser::Simple::Reporter -> new(input_file => 'data/s.1.html');
+	my($s) = $p -> traverse_file;
 
-	$p -> parse_file('in.html', 'out.html');
+	print "$_\n" for @$s;
 
 	# Method 2:
 
-	my($p) = HTML::Parser::Simple -> new();
+	my($p) = HTML::Parser::Simple::Reporter -> new;
+	my($s) = $p -> traverse_file(input_file => 'data/s.1.html');
 
-	$p -> parse('<html>...</html>');
-	$p -> traverse($p -> get_root() );
-	print $p -> result();
+	print "$_\n" for @$s;
+
+See scripts/traverse.file.pl.
 
 =head1 Description
 
-C<HTML::Parser::Simple> is a pure Perl module.
+C<HTML::Parser::Simple::Reporter> is a pure Perl module.
 
-It parses HTML V 4 files, and generates a tree of nodes per HTML tag.
+It is a sub-class of L<HTML::Parser::Simple>.
 
-The data associated with each node is documented in the FAQ.
+Specifically, this module overrides the method L<HTML::Parse::Simple/traverse($node)>, to demonstrate
+a different way of formatting the output.
+
+It parses HTML V 4 files, and generates a tree of nodes, with 1 node per HTML tag.
+
+The data associated with each node is documented in the L<HTML::Parse::Simple/FAQ>.
 
 =head1 Distributions
 
@@ -136,68 +138,26 @@ help on unpacking and installing.
 
 =head1 Constructor and initialization
 
-new(...) returns an object of type C<HTML::Parser::Simple>.
+new(...) returns an object of type C<HTML::Parser::Simple::Reporter>.
 
-This is the class's contructor.
+This is the class contructor.
 
-Usage: C<< HTML::Parser::Simple -> new() >>.
+Usage: C<< HTML::Parser::Simple::Reporter -> new() >>.
 
 This method takes a hashref of options.
 
 Call C<new()> as C<< new({option_1 => value_1, option_2 => value_2, ...}) >>.
 
-Available options:
+Available options (each one of which is also a method):
 
 =over 4
 
-=item o input_dir
-
-This takes the path where the input file is to read from.
-
-The default value is '' (the empty string).
-
-=item o output_dir
-
-This takes the path where the output file is to be written.
-
-The default value is '' (the empty string).
-
-=item o verbose
-
-This takes either a 0 or a 1.
-
-Write more or less progress messages.
-
-The default value is 0.
-
-Note: Currently, setting verbose does nothing.
-
-=item o xhtml
-
-This takes either a 0 or a 1.
-
-0 means do not accept an XML declaration, such as <?xml version="1.0" encoding="UTF-8"?>
-at the start of the input file, and some other XHTML features.
-
-1 means accept it.
-
-The default value is 0.
-
-Warning: The only XHTML changes to this code, so far, are:
-
-=over 4
-
-=item o Accept the XML declaration
-
-E.g.: <?xml version="1.0" standalone='yes'?>.
-
-=item o Accept attribute names containing the ':' char
-
-E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
+=item o None specific to this class
 
 =back
 
-=back
+But since this class is a sub-class of L<HTML::Parser::Simple>, it share all the options to
+C<< new() >> documented in that class: L<HTML::Parser::Simple/Constructor and initialization>.
 
 =head1 Methods
 
@@ -205,10 +165,79 @@ This module is a sub-class of L<HTML::Parser::Simple>, and inherits all its meth
 
 Further, it overrides the L<HTML::Parser::Simple/traverse($node)> method.
 
-=head2 traverse($node)
+=head2 traverse($node, $output, $depth)
 
+Returns $output as an arrayref of strings.
+
+Traverses the tree built by calling L<HTML::Parser::Simple/parse($html)>.
+
+Parameters:
+
+=over 4
+
+=item o $node
+
+The node at which to start the traversal. This is normally $self -> root.
+
+=item o $output
+
+The arrayref in which output is stored. It is normally used like this:
+
+	my($arrayref) = [];
+
+	$p -> traverse($p -> root, $arrayref);
+
+	print "$_\n" for @$arrayref;
+
+=item o $depth
+
+The depth of $node within the tree. This is normally set to 0.
+
+In C<< traverse() >> it is used to indent the output.
+
+If not specified, it defaults to 0.
+
+=back
+
+Lastly note that this method ignores the root of the tree, and hence ignores the DOCTYPE which is stored
+as an attribute of the root.
+
+=head2 traverse_file($input_file_name)
+
+Returns an arrayref of formatted text generated from the nodes in the tree built by calling
+L<HTML::Parse::Simple/parse($html)>.
+
+Traverses the given file, or the file named in C<< new(input_file => $name) >>, or the file named in
+C<< input_file($name) >>.
+
+Basically it does this (recalling that this class sub-classes L<HTML::Parser::Simple>):
+
+	# Read file and store contents in $html.
+
+	$self -> parse($html);
+
+	my($output) = [];
+
+	$self -> traverse($self -> root, $output, 0);
+
+	return $output;
+
+However, since this class has overridden the L<HTML::Parse::Simple/traverse($node)> method, the output is
+not written anywhere, but rather is stored in an arrayref, and returned as the result of this method.
+
+Note: The parameter passed in to C<< traverse_file($input_file_name) >>, takes precedence over the
+I<input_file> parameter passed in to C<< new() >>, and over the internal value set with
+C<< input_file($in_file_name) >>.
+
+Lastly, the parameter passed in to C<< traverse_file($input_file_name) >> is used to update
+the internal value set with the I<input_file> parameter passed in to C<< new() >>,
+or set with a call to C<< input_file($in_file_name) >>.
+
+See the L</Synopsis> for sample code. See also scripts/traverse.file.pl.
 
 =head1 FAQ
+
+See L<HTML::Parse::Simple/FAQ>.
 
 =head1 Author
 

@@ -68,7 +68,7 @@ sub parse
 			}
 		}
 
-		die "Can't parse $string - not a properly formed attribute string\n"; if ($string eq $original);
+		die "Can't parse $string - not a properly formed attribute string\n" if ($string eq $original);
 	}
 
 	$self -> a_hashref($attrs);
@@ -112,6 +112,15 @@ sub string2hashref
 C<HTML::Parser::Simple::Attributes> - A simple HTML attribute parser
 
 =head1 Synopsis
+
+	#!/usr/bin/env perl
+
+	use strict;
+	use warnings;
+
+	use HTML::Parser::Simple::Attributes;
+
+	# -------------------------
 
 	# Method 1:
 
