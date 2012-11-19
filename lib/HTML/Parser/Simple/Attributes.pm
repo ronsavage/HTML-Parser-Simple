@@ -26,6 +26,17 @@ sub get_attr
 
 # -----------------------------------------------
 
+sub hashref2string
+{
+	my($self, $h) = @_;
+	$h ||= {};
+
+	return '{' . join(', ', map{"$_ => $$h{$_}"} sort keys %$h) . '}';
+
+} # End of hashref2string.
+
+# -----------------------------------------------
+
 sub new
 {
 	my($class, $a_string) = @_;

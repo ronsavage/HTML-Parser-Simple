@@ -1,7 +1,4 @@
 #!/usr/bin/env perl
-#
-# Name:
-#    parse.html.pl.
 
 use strict;
 use warnings;
@@ -10,13 +7,4 @@ use HTML::Parser::Simple;
 
 # -------------------------
 
-my($p) = HTML::Parser::Simple -> new
-(
- {
-	 input_dir  => '/var/www',
-	 output_dir => '/tmp',
-	 verbose    => 1,
- }
-);
-
-$p -> parse_file('s.1.html', 's.2.html');
+HTML::Parser::Simple -> new(input_file => 's.1.html', output_file => 's.2.html') -> parse_file;
