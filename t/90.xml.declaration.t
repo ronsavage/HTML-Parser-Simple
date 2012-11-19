@@ -6,7 +6,7 @@ use HTML::Parser::Simple;
 
 use Test::More tests => 1;
 
-# -----------------------
+# ------------------------
 
 my($data)   = Data -> new;
 my($html)   = $data -> read_file('t/data/90.xml.declaration.xhtml');

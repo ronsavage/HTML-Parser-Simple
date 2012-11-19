@@ -1,10 +1,5 @@
 package Data;
 
-use strict;
-use warnings;
-
-use Moos;
-
 our $VERSION = '1.08';
 
 # -----------------------------------------------
