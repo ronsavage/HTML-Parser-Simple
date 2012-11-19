@@ -17,8 +17,12 @@ my($builder) = Module::Build -> new
 	},
 	requires =>
 	{
+		Moos         => 0.13,
+		parent       => 0,
 		perl         => 5.006,
+		strict       => 0,
 		Tree::Simple => 0,
+		warnings     => 0,
 	},
 );
 

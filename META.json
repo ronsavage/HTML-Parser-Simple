@@ -27,8 +27,12 @@
       },
       "runtime" : {
          "requires" : {
+            "Moos" : "0.13",
             "Tree::Simple" : "0",
-            "perl" : "5.006"
+            "parent" : "0",
+            "perl" : "5.006",
+            "strict" : "0",
+            "warnings" : "0"
          }
       }
    },

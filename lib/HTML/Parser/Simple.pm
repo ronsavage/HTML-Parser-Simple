@@ -1,7 +1,5 @@
 package HTML::Parser::Simple;
 
-use File::Spec;
-
 use Moos; # Turns on strict and warnings. Provides 'has'.
 
 use Tree::Simple;

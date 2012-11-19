@@ -24,10 +24,14 @@ WriteMakefile
 	PL_FILES  => {},
 	PREREQ_PM =>
 	{
+		Moos         => 0.13,
+		parent       => 0,
 		perl         => 5.006,
+		strict       => 0,
 		Test::More   => 0,
 		Test::Pod    => 0,
 		Tree::Simple => 0,
+		warnings     => 0,
 	},
 	VERSION_FROM => 'lib/HTML/Parser/Simple.pm',
 );
