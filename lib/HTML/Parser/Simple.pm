@@ -1,7 +1,5 @@
 package HTML::Parser::Simple;
 
-use Carp;
-
 use File::Spec;
 
 use Moos; # Turns on strict and warnings. Provides 'has'.
@@ -478,7 +476,7 @@ sub parse
 			$metadata = $self -> current_node -> getNodeValue;
 			$msg      .= "Current tag: <$$metadata{'name'}>. Next 100 chars: " . substr($html, 0, 100);
 
-			Carp::croak $msg;
+			die "$msg\n";
 		}
 
 		$original = $html;
@@ -544,12 +542,12 @@ sub parse_file
 
 	$self -> log("Reading $input_file_name");
 
-	open(INX, $input_file_name) || Carp::croak "Can't open($input_file_name): $!";
+	open(INX, $input_file_name) || die "Can't open($input_file_name): $!\n";
 	my($html);
 	read(INX, $html, -s INX);
 	close INX;
 
-	Carp::croak "Can't read($input_file_name): $!" if (! defined $html);
+	die "Can't read($input_file_name): $!\n" if (! defined $html);
 
 	$self -> log('Parsing');
 
@@ -561,7 +559,7 @@ sub parse_file
 
 	$self -> log("Writing $output_file_name");
 
-	open(OUT, "> $output_file_name") || Carp::croak "Can't open(> $output_file_name): $!";
+	open(OUT, "> $output_file_name") || die "Can't open(> $output_file_name): $!\n";
 	print OUT $self -> result;
 	close OUT;
 

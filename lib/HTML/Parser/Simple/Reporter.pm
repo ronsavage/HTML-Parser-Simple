@@ -1,11 +1,10 @@
 package HTML::Parser::Simple::Reporter;
 
 use parent 'HTML::Parser::Simple';
-use 5.006;
-use strict;
-use warnings;
 
 use HTML::Parser::Simple::Attributes;
+
+use Moos; # Turns on strict and warnings. Provides 'has'.
 
 our $VERSION = '1.08';
 
