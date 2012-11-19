@@ -292,7 +292,7 @@ sub log
 {
 	my($self, $msg) = @_;
 
-	print "$msg\n" if ($self -> verbose);
+	print STDERR "$msg\n" if ($self -> verbose);
 
 } # End of log.
 
@@ -494,6 +494,10 @@ sub parse
 
 	$self -> parse_end_tag('', \@stack);
 
+	# Return the invocant to allow method chaining.
+
+	return $self;
+
 } # End of parse.
 
 # -----------------------------------------------
@@ -570,6 +574,10 @@ sub parse_file
 	open(OUT, "> $output_file_name") || die "Can't open(> $output_file_name): $!\n";
 	print OUT $self -> result;
 	close OUT;
+
+	# Return the invocant to allow method chaining.
+
+	return $self;
 
 } # End of parse_file.
 
@@ -658,6 +666,10 @@ sub traverse
 	$self -> result($self -> result . ($index <= $#$content && defined($$content[$index]) ? $$content[$index] : '') );
 	$self -> result($self -> result . "</$name>") if (! ${$self -> empty}{$name} && ($name ne 'root') );
 
+	# Return the invocant to allow method chaining.
+
+	return $self;
+
 } # End of traverse.
 
 # -----------------------------------------------
@@ -685,19 +697,13 @@ HTML::Parser::Simple - Parse nice HTML files without needing a compiler
 	(
 		input_file  => 'data/s.1.html',
 		output_file => 'data/s.2.html',
-		verbose     => 1,
 	);
 
 	$p -> parse_file;
 
-	print $p -> result;
-
 	# Method 2:
 
-	my($p) = HTML::Parser::Simple -> new
-	(
-		verbose => 1,
-	);
+	my($p) = HTML::Parser::Simple -> new;
 
 	$p -> parse_file('data/s.1.html', 'data/s.2.html');
 
@@ -705,10 +711,11 @@ HTML::Parser::Simple - Parse nice HTML files without needing a compiler
 
 	my($p) = HTML::Parser::Simple -> new;
 
-	$p -> parse('<html>...</html>');
-	$p -> traverse($p -> get_root);
+	print $p -> parse('<html>...</html>') -> traverse($p -> root) -> result;
 
-	print $p -> result;
+Of course, these can be abbreviated by using method chaining. E.g. Method 2 could be:
+
+	HTML::Parser::Simple -> new -> parse_file('data/s.1.html', 'data/s.2.html');
 
 =head1 Description
 
@@ -724,7 +731,7 @@ This module is available as a Unix-style distro (*.tgz).
 
 See L<http://savage.net.au/Perl-modules.html> for details.
 
-See Lhttp://savage.net.au/Perl-modules/html/installing-a-module.html> for
+See L<http://savage.net.au/Perl-modules/html/installing-a-module.html> for
 help on unpacking and installing.
 
 =head1 Constructor and initialization
@@ -733,13 +740,13 @@ new(...) returns an object of type C<HTML::Parser::Simple>.
 
 This is the class contructor.
 
-Usage: C<< HTML::Parser::Simple -> new() >>.
+Usage: C<< HTML::Parser::Simple -> new >>.
 
-This method takes a hashref of options.
+This method takes a hash of options.
 
-Call C<new()> as C<< new({option_1 => value_1, option_2 => value_2, ...}) >>.
+Call C<< new() >> as C<< new(option_1 => value_1, option_2 => value_2, ...) >>.
 
-Available options:
+Available options (each one of which is also a method):
 
 =over 4
 
@@ -826,25 +833,32 @@ Returns a hashref where the keys are the names of HTML tags of type inline.
 
 The corresponding values in the hashref are just 1.
 
-Typical keys: area, base, input, wbr.
+Typical keys: a, em, img, textarea.
 
 =head2 input_file($in_file_name)
 
 Gets or sets the input file name used by L</parse($input_file_name, $output_file_name)>.
 
 Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
-I<input_file> and I<output_file> parameters passed in to C<new()>, and over the internal values set with
-C<input_file($in_file_name)> and C<output_file($out_file_name)>.
+I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over the internal values set with
+C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
+
+'input_file' is a parameter to L</new()>. See L</Constructor and Initialization> for details.
 
 =head2 log($msg)
 
-Print $msg if C<new()> was called as C<< new({verbose => 1}) >>, or if $p -> set_verbose(1) was called.
+Print $msg to STDERR if C<< new() >> was called as C<< new(verbose => 1) >>, or if C<< $p -> verbose(1) >>
+was called.
 
 Otherwise, print nothing.
 
+=head2 new()
+
+This is the constructor. See L</Constructor and initialization> for details.
+
 =head2 node_type()
 
-Returns the type of the most recently created node, 'global', 'head', or 'body'.
+Returns the type of the most recently created node, I<global>, I<head>, or I<body>.
 
 See the first question in the L</FAQ> for details.
 
@@ -853,26 +867,35 @@ See the first question in the L</FAQ> for details.
 Gets or sets the output file name used by L</parse($input_file_name, $output_file_name)>.
 
 Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
-I<input_file> and I<output_file> parameters passed in to C<new()>, and over the internal values set with
-C<input_file($in_file_name)> and C<output_file($out_file_name)>.
+I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over the internal values set with
+C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
+
+'output_file' is a parameter to L</new()>. See L</Constructor and Initialization> for details.
 
 =head2 parse($html)
 
+Returns the invocant. Thus C<< $p -> parse >> returns $p. This allows for method chaining. See the L</Synopsis>.
+
 Parses the string of HTML in $html, and builds a tree of nodes.
 
-After calling C<< $p -> parse() >>, you must call C<< $p -> traverse($p -> get_root) >> before calling C<< $p -> result >>.
+After calling C<< $p -> parse($html) >>, you must call C<< $p -> traverse($p -> root) >> before calling
+C<< $p -> result >>.
 
 Alternately, use C<< $p -> parse_file >>, which calls all these methods for you.
 
-Note: C<parse()> may be called directly or via C<parse_file()>.
+Note: C<< parse() >> may be called directly or via C<< parse_file() >>.
 
 =head2 parse_file($input_file_name, $output_file_name)
 
+Returns the invocant. Thus C<< $p -> parse_file >> returns $p. This allows for method chaining. See the L</Synopsis>.
+
 Parses the HTML in the input file, and writes the result to the output file.
 
+C<< parse_file() >> calls L</parse($html)> and L</traverse($node)>, using C<< $p -> root >> for $node.
+
 Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
-I<input_file> and I<output_file> parameters passed in to C<new()>, and over the internal values set with
-C<input_file($in_file_name)> and C<output_file($out_file_name)>.
+I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over the internal values set with
+C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
 
 =head2 result()
 
@@ -896,28 +919,61 @@ Note: Some keys, e.g. tr, are also returned by L</block()>.
 
 =head2 tagged_attribute()
 
-Returns a string to be used as a regexp.
+Returns a string to be used as a regexp, to capture tags and their optional attributes.
 
 It does not return qr/$s/; it just returns $s.
 
+This regexp takes one of two forms, depending on the state of the I<xhtml> option. See L</xhtml($Boolean)>.
+
+The regexp has four (4) sets of capturing parentheses:
+
+=over 4
+
+=item o 1 for the whole tag and attribute and trailing / combination
+
+E.g.: <(....)>
+
+=item o 1 for the tag itself
+
+E.g.: <(img)...>
+
+=item o 1 for the tag's optional attributes
+
+E.g.: <img (src="/graph.svg" alt="A graph")>
+
+=item o 1 for the tag's optional trailing /
+
+E.g.: <img ... (/)>
+
+=back
+
 =head2 traverse($node)
+
+Returns the invocant. Thus C<< $p -> traverse >> returns $p. This allows for method chaining. See the L</Synopsis>.
 
 Traverses the tree of nodes, starting at $node.
 
-You normally call this as $p -> traverse($p -> root), to ensure all nodes are visited.
+You normally call this as C<< $p -> traverse($p -> root) >>, to ensure all nodes are visited.
 
 See the L</Synopsis> for sample code.
 
-Or, see scripts/parse.attributes.pl, which uses L<HTML::Parser::Simple::Reporter>, and calls C<traverse($node)>
+Or, see scripts/parse.attributes.pl, which uses L<HTML::Parser::Simple::Reporter>, and calls C<< traverse($node) >>
 via L<HTML::Parser::Simple::Reporter/traverse_file($input_file_name)>.
 
-=head2 verbose()
+=head2 verbose($Boolean)
 
 Gets or sets the verbose parameter.
 
-=head2 xhtml()
+'verbose' is a parameter to L</new()>. See L</Constructor and Initialization> for details.
+
+=head2 xhtml($Boolean)
 
 Gets or sets the xhtml parameter.
+
+If you call this after object creation, the I<trigger> feature of L<Moos> is used to call
+L</tagged_attribute()> so as to correctly set the regexp which recognises xhtml.
+
+'xhtm'> is a parameter to L</new()>. See L</Constructor and Initialization> for details.
 
 =head1 FAQ
 
@@ -1049,7 +1105,7 @@ L<http://savage.net.au/Perl-modules/html/CreateTable.html>.
 
 =head2 How do I test this module (or my file)?
 
-See the previous question, or...
+Preferably, see the previous question, or...
 
 Suggested steps:
 

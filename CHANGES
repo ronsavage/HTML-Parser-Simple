@@ -28,10 +28,11 @@ Revision history for Perl extension HTML::Parser::Simple.
 		New					Old
 		Mutators			Getters and Setters
 		---------------------------------------
-		attributes()		get_attr()
 		attribute_hashref()	-
 		attribute_string()	-
+		get()				get_attr()
 		hashref2string()	-
+		parse()				parse_attributes()
 		string2hashref()	-
 		---------------------------------------
 		HTML::Parser::Simple::Reporter:
@@ -44,16 +45,16 @@ Revision history for Perl extension HTML::Parser::Simple.
 	- Change calls from Carp::croak to die. You should be using Try::Tiny anyway :-).
 	- Change the fix in V 1.07 which output tags and attributes in lower-case.
 		As of V 2.00, tags are in lower-case but the case of attributes is preserved.
-	- When new() is called as new(verbose => 1), messages are printed to STDOUT, not STDERR.
-		If this is a problem, sub-class HTML::Parser::Simple and just override sub log($msg).
 	- Scripts shipped in scripts/:
-		o parse.attributes.pl uses HTML::Parser::Simple::Reporter.
-		o parse.html.pl       uses HTML::Parser::Simple.
-		o parse.xhtml.pl      uses HTML::Parser::Simple.
+		Name					Module
+		o parse.attributes.pl	HTML::Parser::Simple::Reporter
+		o parse.html.pl			HTML::Parser::Simple
+		o parse.xhtml.pl		HTML::Parser::Simple
 	- Sample data used by the scripts:
-		o parse.attributes.pl. Input: data/s.1.html.                   Output: Screen.
-		o parse.html.pl.       Input: data/s.1.html.                   Output: data/s.2.html.
-		o parse.xhtml.pl.      Input: t/data/90.xml.declaration.xhtml. Output: data/90.xml.declaration.xml.
+		Name					Input							Output
+		o parse.attributes.pl	data/s.1.html					Screen
+		o parse.html.pl			data/s.1.html					data/s.2.html
+		o parse.xhtml.pl		t/data/90.xml.declaration.xhtml	data/90.xml.declaration.xml
 
 1.07  Sun Nov 18 12:06:00 2012
 	- Replace /usr/bin/perl with /usr/bin/env perl.
