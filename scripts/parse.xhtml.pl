@@ -1,24 +1,16 @@
 #!/usr/bin/env perl
-#
-# Name:
-#    parse.xhtml.pl.
 
 use strict;
 use warnings;
 
 use HTML::Parser::Simple;
 
-# -------------------------
+# -----------------------
 
-my($p) = HTML::Parser::Simple -> new
+HTML::Parser::Simple -> new
 (
- {
-	 input_dir  => './scripts',
-	 output_dir => './scripts',
-	 verbose    => 1,
-	 xhtml      => 1,
- }
-);
-
-# Fails:
-$p -> parse_file('91.mathml.xhtml', 'out.xhtml');
+	input_file  => 't/data/90.xml.declaration.xhtml',
+	output_file => 'data/90.xml.declaration.xml',
+	verbose     => 1,
+	xhtml       => 1,
+) -> parse_file;

@@ -1,28 +1,26 @@
 package HTML::Parser::Simple::Attributes;
 
-use strict;
-use warnings;
+use Moos; # Turns on strict and warnings. Provides 'has'.
 
-use Carp;
+has attribute_hashref => (default => sub{return {} });
+has attribute_string  => (default => sub{return ''});
+has parsed            => (default => sub{return 0});
 
 our $VERSION = '1.07';
 
 # -----------------------------------------------
 
-sub get_attr
+sub attributes
 {
 	my($self, $key) = @_;
 
-	# Only parse each attribute string once.
+	$self -> parse_attributes if ($self -> parsed == 0);
 
-	if (! exists $$self{attrs})
-	{
-		$$self{attrs} = $self -> parse_attributes($$self{a_string});
-	}
+	my($attrs) = $self -> attribute_hashref;
 
-	return $key ? $$self{attrs}{$key} : $$self{attrs};
+	return $key ? $$attrs{$key} : $$attrs;
 
-} # End of get_attr.
+} # End of attributes.
 
 # -----------------------------------------------
 
@@ -37,16 +35,6 @@ sub hashref2string
 
 # -----------------------------------------------
 
-sub new
-{
-	my($class, $a_string) = @_;
-
-	return bless({a_string => $a_string}, $class);
-
-} # End of new.
-
-# -----------------------------------------------
-
 our(@quote) =
 (
  qr{^([a-zA-Z0-9_-]+)\s*=\s*["]([^"]+)["]\s*(.*)$}so, # Double quotes.
@@ -56,32 +44,38 @@ our(@quote) =
 
 sub parse_attributes
 {
-	my($self, $a_string) = @_;
-	$a_string  =~ s/^\s+|\s+$//g;
+	my($self, $string) = @_;
+	$string    ||= $self -> attribute_string;
+	$string    =~ s/^\s+|\s+$//g;
 	my($attrs) = {};
 
-	while (length $a_string)
+	$self -> attribute_string($string);
+
+	while (length $string)
 	{
 		my($i)        = - 1;
-		my($original) = $a_string;
+		my($original) = $string;
 
 		while ($i < $#quote)
 		{
 			$i++;
 
-			if ($a_string =~ $quote[$i])
+			if ($string =~ $quote[$i])
 			{
 				$$attrs{$1} = $2;
-				$a_string   = $3;
+				$string     = $3;
 				$i          = - 1;
 			}
 		}
 
-		if ($a_string eq $original)
+		if ($string eq $original)
 		{
-			croak "parse_attributes: can't parse $a_string - not a properly formed attribute string";
+			die "parse_attributes(): can't parse $string - not a properly formed attribute string\n";
 		}
 	}
+
+	$self -> attribute_hashref($attrs);
+	$self -> parsed(1);
 
 	return $attrs;
 

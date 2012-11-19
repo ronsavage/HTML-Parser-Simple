@@ -7,4 +7,4 @@ use HTML::Parser::Simple::Reporter;
 
 # ---------------------------------
 
-print "$_\n" for @{HTML::Parser::Simple::Reporter -> new -> traverse_file('s.1.html')};
+print "$_\n" for @{HTML::Parser::Simple::Reporter -> new -> traverse_file('data/s.1.html')};

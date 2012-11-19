@@ -5,6 +5,11 @@ use warnings;
 
 use HTML::Parser::Simple;
 
-# -------------------------
+# -----------------------
 
-HTML::Parser::Simple -> new(input_file => 's.1.html', output_file => 's.2.html') -> parse_file;
+HTML::Parser::Simple -> new
+(
+	input_file  => 'data/s.1.html',
+	output_file => 'data/s.2.html',
+	verbose     => 1,
+) -> parse_file;

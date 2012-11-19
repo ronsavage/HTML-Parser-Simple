@@ -542,6 +542,8 @@ sub parse_file
 	$input_file_name  ||= $self -> input_file;
 	$output_file_name ||= $self -> output_file;
 
+	$self -> log("Reading $input_file_name");
+
 	open(INX, $input_file_name) || Carp::croak "Can't open($input_file_name): $!";
 	my($html);
 	read(INX, $html, -s INX);
@@ -549,8 +551,15 @@ sub parse_file
 
 	Carp::croak "Can't read($input_file_name): $!" if (! defined $html);
 
+	$self -> log('Parsing');
+
 	$self -> parse($html);
+
+	$self -> log('Traversing');
+
 	$self -> traverse($self -> root);
+
+	$self -> log("Writing $output_file_name");
 
 	open(OUT, "> $output_file_name") || Carp::croak "Can't open(> $output_file_name): $!";
 	print OUT $self -> result;
