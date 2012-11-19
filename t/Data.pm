@@ -2,7 +2,7 @@ package Data;
 
 use Moos; # Turns on strict and warnings. Provides 'has'.
 
-our $VERSION = '1.08';
+our $VERSION = '2.00';
 
 # -----------------------------------------------
 

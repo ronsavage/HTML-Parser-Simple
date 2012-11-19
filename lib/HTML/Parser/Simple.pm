@@ -5,21 +5,31 @@ use Moos; # Turns on strict and warnings. Provides 'has'.
 use Tree::Simple;
 
 has block            => (default => sub {return {} });
-has current_node     => ();
+has current_node     => (default => sub {return ''});
 has depth            => (default => sub {return 0});
 has empty            => (default => sub {return {} });
 has inline           => (default => sub {return {} });
-has input_file       => ();
+has input_file       => (default => sub {return ''});
 has node_type        => (default => sub {return 'global'});
-has output_file      => ();
+has output_file      => (default => sub {return ''});
 has result           => (default => sub {return ''});
-has root             => ();
+has root             => (default => sub {return ''});
 has self_close       => (default => sub {return {} });
-has tagged_attribute => ();
-has verbose          => ();
-has xhtml            => ();
+has tagged_attribute => (default => sub {return {} });
+has verbose          => (default => sub {return 0});
+has xhtml            =>
+(
+	default => sub {return 0},
+	trigger =>
+	sub
+	{
+		my($self, $new, $old) = @_;
 
-our $VERSION = '1.08';
+		$self -> _set_tagged_attribute($new);
+	}
+);
+
+our $VERSION = '2.00';
 
 # -----------------------------------------------
 
@@ -150,7 +160,7 @@ sub BUILD
 
 	if ($self -> xhtml)
 	{
-		# Compared to the non-XHTML re, this has a extra  ':' directly under the ':' in this comment.
+		# Compared to the non-XHTML re, this has an extra  ':' in the first [].
 
 		$self -> tagged_attribute
 		(
@@ -282,7 +292,7 @@ sub log
 {
 	my($self, $msg) = @_;
 
-	print STDERR "$msg\n" if ($self -> verbose);
+	print "$msg\n" if ($self -> verbose);
 
 } # End of log.
 
@@ -593,6 +603,31 @@ sub parse_start_tag
 
 # -----------------------------------------------
 
+sub _set_tagged_attribute
+{
+	my($self, $new, $old) = @_;
+
+	if ($new)
+	{
+		$self -> tagged_attribute
+		(
+			# Compared to the non-XHTML re, this has an extra  ':' in the first [].
+
+			q#^(<(\w+)((?:\s+[-:\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)#
+		);
+	}
+	else
+	{
+		$self -> tagged_attribute
+		(
+			q#^(<(\w+)((?:\s+[-\w]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>)#
+		);
+	}
+
+} # End of _set_tagged_attribute.
+
+# -----------------------------------------------
+
 sub traverse
 {
 	my($self, $node) = @_;
@@ -648,44 +683,55 @@ HTML::Parser::Simple - Parse nice HTML files without needing a compiler
 
 	my($p) = HTML::Parser::Simple -> new
 	(
-	 {
-		input_dir  => '/source/dir',
-		output_dir => '/dest/dir',
-	 }
+		input_file  => 'data/s.1.html',
+		output_file => 'data/s.2.html',
+		verbose     => 1,
 	);
 
-	$p -> parse_file('in.html', 'out.html');
+	$p -> parse_file;
+
+	print $p -> result;
 
 	# Method 2:
+
+	my($p) = HTML::Parser::Simple -> new
+	(
+		verbose => 1,
+	);
+
+	$p -> parse_file('data/s.1.html', 'data/s.2.html');
+
+	# Method 3:
 
 	my($p) = HTML::Parser::Simple -> new;
 
 	$p -> parse('<html>...</html>');
 	$p -> traverse($p -> get_root);
+
 	print $p -> result;
 
 =head1 Description
 
 C<HTML::Parser::Simple> is a pure Perl module.
 
-It parses HTML V 4 files, and generates a tree of nodes per HTML tag.
+It parses HTML V 4 files, and generates a tree of nodes, with 1 node per HTML tag.
 
-The data associated with each node is documented in the FAQ.
+The data associated with each node is documented in the L</FAQ>.
 
 =head1 Distributions
 
 This module is available as a Unix-style distro (*.tgz).
 
-See http://savage.net.au/Perl-modules.html for details.
+See L<http://savage.net.au/Perl-modules.html> for details.
 
-See http://savage.net.au/Perl-modules/html/installing-a-module.html for
+See Lhttp://savage.net.au/Perl-modules/html/installing-a-module.html> for
 help on unpacking and installing.
 
 =head1 Constructor and initialization
 
 new(...) returns an object of type C<HTML::Parser::Simple>.
 
-This is the class's contructor.
+This is the class contructor.
 
 Usage: C<< HTML::Parser::Simple -> new() >>.
 
@@ -697,40 +743,38 @@ Available options:
 
 =over 4
 
-=item o input_dir
+=item o input_file => $a_file_name
 
-This takes the path where the input file is to read from.
+This takes the file name, including the path, of the input file.
 
-The default value is '' (the empty string).
+Default: '' (the empty string).
 
-=item o output_dir
+=item o output_file => $a_file_name
 
-This takes the path where the output file is to be written.
+This takes the file name, including the path, of the output file.
 
-The default value is '' (the empty string).
+Default: '' (the empty string).
 
-=item o verbose
+=item o verbose => $Boolean
 
 This takes either a 0 or a 1.
 
-Write more or less progress messages to STDERR.
+Write more or less progress messages.
 
-The default value is 0.
+Default: 0.
 
-Note: Currently, setting verbose does nothing.
-
-=item o xhtml
+=item o xhtml => $Boolean
 
 This takes either a 0 or a 1.
 
 0 means do not accept an XML declaration, such as <?xml version="1.0" encoding="UTF-8"?>
-at the start of the input file, and some other XHTML features.
+at the start of the input file, and some other XHTML features, explained next.
 
-1 means accept it.
+1 means accept XHTML input.
 
-The default value is 0.
+Default: 0.
 
-Warning: The only XHTML changes to this code, so far, are:
+The only XHTML changes to this code, so far, are:
 
 =over 4
 
@@ -748,6 +792,16 @@ E.g.: <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">.
 
 =head1 Methods
 
+=head2 block()
+
+Returns a hashref where the keys are the names of HTML tags of type block.
+
+The corresponding values in the hashref are just 1.
+
+Typical keys: address, form, p, table, tr.
+
+Note: Some keys, e.g. tr, are also returned by L</self_close()>.
+
 =head2 current_node()
 
 Returns the L<Tree::Simple> object which the parser calls the current node.
@@ -756,39 +810,51 @@ Returns the L<Tree::Simple> object which the parser calls the current node.
 
 Returns the nesting depth of the current tag.
 
-It's just there in case you need it.
+The method is just here in case you need it.
 
-=head2 input_file()
+=head2 empty()
 
-Returns the input_file parameter, as passed in to C<new()>.
+Returns a hashref where the keys are the names of HTML tags of type empty.
 
-=head2 output_file()
+The corresponding values in the hashref are just 1.
 
-Returns the output_file parameter, as passed in to C<new()>.
+Typical keys: area, base, input, wbr.
+
+=head2 inline()
+
+Returns a hashref where the keys are the names of HTML tags of type inline.
+
+The corresponding values in the hashref are just 1.
+
+Typical keys: area, base, input, wbr.
+
+=head2 input_file($in_file_name)
+
+Gets or sets the input file name used by L</parse($input_file_name, $output_file_name)>.
+
+Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
+I<input_file> and I<output_file> parameters passed in to C<new()>, and over the internal values set with
+C<input_file($in_file_name)> and C<output_file($out_file_name)>.
+
+=head2 log($msg)
+
+Print $msg if C<new()> was called as C<< new({verbose => 1}) >>, or if $p -> set_verbose(1) was called.
+
+Otherwise, print nothing.
 
 =head2 node_type()
 
 Returns the type of the most recently created node, 'global', 'head', or 'body'.
 
-See the first question in the FAQ for details.
+See the first question in the L</FAQ> for details.
 
-=head2 root()
+=head2 output_file($out_file_name)
 
-Returns the node which the parser calls the root of the tree of nodes.
+Gets or sets the output file name used by L</parse($input_file_name, $output_file_name)>.
 
-=head2 verbose()
-
-Returns the verbose paramete, as passed in to C<new()>.
-
-=head2 xhtml()
-
-Returns the xhtml parameter, as passed in to C<new()>.
-
-=head2 log($msg)
-
-Print $msg to STDERR if C<new()> was called as C<< new({verbose => 1}) >>, or if $p -> set_verbose(1) was called.
-
-Otherwise, print nothing.
+Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
+I<input_file> and I<output_file> parameters passed in to C<new()>, and over the internal values set with
+C<input_file($in_file_name)> and C<output_file($out_file_name)>.
 
 =head2 parse($html)
 
@@ -804,9 +870,54 @@ Note: C<parse()> may be called directly or via C<parse_file()>.
 
 Parses the HTML in the input file, and writes the result to the output file.
 
+Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
+I<input_file> and I<output_file> parameters passed in to C<new()>, and over the internal values set with
+C<input_file($in_file_name)> and C<output_file($out_file_name)>.
+
 =head2 result()
 
-Returns the result so far of the parse.
+Returns the string which is the result of the parse.
+
+See scripts/parse.html.pl.
+
+=head2 root()
+
+Returns the L<Tree::Simple> object which the parser calls the root of the tree of nodes.
+
+=head2 self_close()
+
+Returns a hashref where the keys are the names of HTML tags of type self close.
+
+The corresponding values in the hashref are just 1.
+
+Typical keys: dd, dt, p, tr.
+
+Note: Some keys, e.g. tr, are also returned by L</block()>.
+
+=head2 tagged_attribute()
+
+Returns a string to be used as a regexp.
+
+It does not return qr/$s/; it just returns $s.
+
+=head2 traverse($node)
+
+Traverses the tree of nodes, starting at $node.
+
+You normally call this as $p -> traverse($p -> root), to ensure all nodes are visited.
+
+See the L</Synopsis> for sample code.
+
+Or, see scripts/parse.attributes.pl, which uses L<HTML::Parser::Simple::Reporter>, and calls C<traverse($node)>
+via L<HTML::Parser::Simple::Reporter/traverse_file($input_file_name)>.
+
+=head2 verbose()
+
+Gets or sets the verbose parameter.
+
+=head2 xhtml()
+
+Gets or sets the xhtml parameter.
 
 =head1 FAQ
 
@@ -884,7 +995,9 @@ It's just there in case you need it.
 
 =head2 How are tags and attributes handled?
 
-They are stored in lower-case in a tree managed by L<Tree::Simple>.
+Tags are stored in lower-case, in a tree managed by L<Tree::Simple>.
+
+Attributes are stored in the same case as in the original HTML.
 
 The root of the tree is returned be L</root()>.
 
@@ -920,13 +1033,23 @@ For example, if you feed in a HTML page without the title tag, this module does 
 
 =head2 How do I view the output HTML?
 
-By installing HTML::Revelation, of course!
+There are various ways.
+
+=over 4
+
+=item o See scripts/parse.html.pl
+
+=item o By installing HTML::Revelation, of course!
 
 Sample output:
 
-http://savage.net.au/Perl-modules/html/CreateTable.html
+L<http://savage.net.au/Perl-modules/html/CreateTable.html>.
+
+=back
 
 =head2 How do I test this module (or my file)?
+
+See the previous question, or...
 
 Suggested steps:
 
@@ -964,9 +1087,7 @@ If they match, or even if they don't match, you're finished.
 
 No, never.
 
-Help with quirks:
-
-http://www.quirksmode.org/sitemap.html
+Help with quirks: L<http://www.quirksmode.org/sitemap.html>.
 
 =head2 Is there anything I should be aware of?
 
@@ -977,7 +1098,7 @@ In such cases, do not seek to fix the code. Instead, fix your (faulty) preconcep
 
 The 'a' tag, for example, is defined to be an inline tag, but the 'div' tag is a block-level tag.
 
-I don't define 'a' to be inline, others do, e.g. http://www.w3.org/TR/html401/ and hence HTML::Tagset.
+I don't define 'a' to be inline, others do, e.g. L<http://www.w3.org/TR/html401/> and hence HTML::Tagset.
 
 Inline means:
 
@@ -1031,6 +1152,8 @@ Some people might falsely assume HTML::Parser can automatically fall back to HTM
 
 As always with OO code, sub-class! In this case, you write a new version of the traverse() method.
 
+See L<HTML::Parser::Simple::Reporter>, for example. It overrides L</traverse($node)>.
+
 =item o The crude way
 
 Alternately, implement another method in your sub-class, e.g. process(), which recurses like traverse().
@@ -1044,27 +1167,30 @@ Yes. See: git://github.com/ronsavage/html--parser--simple.git
 
 =head2 How is the source formatted?
 
-I edit with Emacs, using the default formatting for Perl.
-
-Stop press! I now use UltraEdit, but the formatting should be exactly the same.
-
-That means, in general, leading 4-space tabs. Hashrefs use a leading tab and then a space.
+I edit with UltraEdit. That means, in general, leading 4-space tabs.
 
 All vertical alignment within lines is done manually with spaces.
 
 Perl::Critic is off the agenda.
 
+=head2 Why did you choose Moos?
+
+For this year's (2012) Google Code-in, I had a quick look at 122 class-building classes, and decided
+L<Moos> was suitable, given it is pure-Perl and has the trigger feature I needed.
+
+See L<http://savage.net.au/Module-reviews/html/gci.2012.class.builder.modules.html>.
+
 =head1 Credits
 
 This Perl HTML parser has been converted from a JavaScript one written by John Resig.
 
-http://ejohn.org/files/htmlparser.js
+L<http://ejohn.org/files/htmlparser.js>.
 
 Well done John!
 
 Note also the comments published here:
 
-http://groups.google.com/group/envjs/browse_thread/thread/edd9033b9273fa58
+L<http://groups.google.com/group/envjs/browse_thread/thread/edd9033b9273fa58>.
 
 =head1 Author
 

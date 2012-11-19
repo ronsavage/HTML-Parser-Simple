@@ -6,7 +6,7 @@ has attribute_hashref => (default => sub{return {} });
 has attribute_string  => (default => sub{return ''});
 has parsed            => (default => sub{return 0});
 
-our $VERSION = '1.08';
+our $VERSION = '2.00';
 
 # -----------------------------------------------
 
@@ -80,6 +80,35 @@ sub parse_attributes
 	return $attrs;
 
 } # End of parse_attributes.
+
+# -----------------------------------------------
+
+sub string2hashref
+{
+	my($self, $s) = @_;
+	$s            ||= '';
+	my($result)   = {};
+
+	if ($s)
+	{
+		if ($s =~ m/^\{\s*([^}]*)\}$/)
+		{
+			my(@attr) = map{split(/\s*=>\s*/)} split(/\s*,\s*/, $1);
+
+			if (@attr)
+			{
+				$result = {@attr};
+			}
+		}
+		else
+		{
+			die "Invalid syntax for hashref: $s";
+		}
+	}
+
+	return $result;
+
+} # End of string2hashref.
 
 # -----------------------------------------------
 

@@ -6,7 +6,7 @@ use HTML::Parser::Simple::Attributes;
 
 use Moos; # Turns on strict and warnings. Provides 'has'.
 
-our $VERSION = '1.08';
+our $VERSION = '2.00';
 
 # -----------------------------------------------
 
@@ -55,6 +55,8 @@ sub traverse_file
 	my($self, $input_file_name) = @_;
 	$input_file_name  ||= $self -> input_file;
 
+	$self -> log("Reading $input_file_name");
+
 	open(INX, $input_file_name) || Carp::croak "Can't open($input_file_name): $!";
 	my($html);
 	read(INX, $html, -s INX);
@@ -62,7 +64,11 @@ sub traverse_file
 
 	Carp::croak "Can't read($input_file_name): $!" if (! defined $html);
 
+	$self -> log('Parsing');
+
 	$self -> parse($html);
+
+	$self -> log('Traversing');
 
 	my($output) = [];
 
@@ -160,7 +166,7 @@ The default value is '' (the empty string).
 
 This takes either a 0 or a 1.
 
-Write more or less progress messages to STDERR.
+Write more or less progress messages.
 
 The default value is 0.
 

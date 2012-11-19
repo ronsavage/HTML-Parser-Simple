@@ -1,7 +1,59 @@
 Revision history for Perl extension HTML::Parser::Simple.
 
-1.08  Mon Nov 19 12:34:00 2012
-	- Change API.
+2.00  Mon Nov 19 12:34:00 2012
+	- Implement a new API, using the pure-Perl module Moos.
+	- The use of Moos means methods which could previously be called as class methods
+		or instance methods must now only be called as instance methods.
+	- The use of Moos means new() now takes a hash, not a hashref. See scripts/*.pl.
+	- Details of the new API:
+		---------------------------------------
+		HTML::Parser::Simple:
+		New					Old
+		Mutators			Getters and Setters
+		---------------------------------------
+		block()				-
+		current_node()		get_current_node(), set_current_node()
+		depth()				get_depth(), set_depth()
+		empty()				-
+		inline()			-
+		input_file()		get_input_dir(), set_input_dir()
+		node_type()			get_node_type(), set_node_type()
+		output_file()		get_output_dir(), set_output_dir()
+		root()				get_root(), set_root()
+		tagged_attribute()	-
+		verbose()			get_verbose(), set_verbose()
+		xhtml()				get_xhtml(), set_xhtml()
+		---------------------------------------
+		HTML::Parser::Simple::Attributes:
+		New					Old
+		Mutators			Getters and Setters
+		---------------------------------------
+		attributes()		get_attr()
+		attribute_hashref()	-
+		attribute_string()	-
+		hashref2string()	-
+		string2hashref()	-
+		---------------------------------------
+		HTML::Parser::Simple::Reporter:
+		New					Old
+		Mutators			Getters and Setters
+		---------------------------------------
+		-					-
+		---------------------------------------
+	- HTML::Parser::Simple::Reporter is a new module. See scripts/parse.attributes.pl.
+	- Change calls from Carp::croak to die. You should be using Try::Tiny anyway :-).
+	- Change the fix in V 1.07 which output tags and attributes in lower-case.
+		As of V 2.00, tags are in lower-case but the case of attributes is preserved.
+	- When new() is called as new(verbose => 1), messages are printed to STDOUT, not STDERR.
+		If this is a problem, sub-class HTML::Parser::Simple and just override sub log($msg).
+	- Scripts shipped in scripts/:
+		o parse.attributes.pl uses HTML::Parser::Simple::Reporter.
+		o parse.html.pl       uses HTML::Parser::Simple.
+		o parse.xhtml.pl      uses HTML::Parser::Simple.
+	- Sample data used by the scripts:
+		o parse.attributes.pl. Input: data/s.1.html.                   Output: Screen.
+		o parse.html.pl.       Input: data/s.1.html.                   Output: data/s.2.html.
+		o parse.xhtml.pl.      Input: t/data/90.xml.declaration.xhtml. Output: data/90.xml.declaration.xml.
 
 1.07  Sun Nov 18 12:06:00 2012
 	- Replace /usr/bin/perl with /usr/bin/env perl.
