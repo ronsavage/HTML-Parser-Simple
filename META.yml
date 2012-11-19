@@ -25,7 +25,6 @@ provides:
     file: lib/HTML/Parser/Simple/Reporter.pm
     version: 1.08
 requires:
-  Carp: 0
   Tree::Simple: 0
   perl: 5.006
 resources:
