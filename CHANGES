@@ -1,5 +1,8 @@
 Revision history for Perl extension HTML::Parser::Simple.
 
+1.08  Mon Nov 19 12:34:00 2012
+	- Change API.
+
 1.07  Sun Nov 18 12:06:00 2012
 	- Replace /usr/bin/perl with /usr/bin/env perl.
 	- Replace common::sense with use strict and use warnings, to get uninit var warnings.
