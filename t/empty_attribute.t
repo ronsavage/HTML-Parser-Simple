@@ -11,7 +11,7 @@ my($a);
 
 eval
 {
-		$a = HTML::Parser::Simple::Attributes -> parse_attributes('name="name" type=""');
+		$a = HTML::Parser::Simple::Attributes -> parse('name="name" type=""');
 };
 
 if ($@)

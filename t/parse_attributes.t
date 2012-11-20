@@ -6,7 +6,7 @@ use HTML::Parser::Simple::Attributes;
 
 my $p = HTML::Parser::Simple::Attributes -> new
 (
-	attribute_string =>
+	a_string =>
 	q{type=text name="my_name"
 		value='my value'
 		id="O'Hare"
