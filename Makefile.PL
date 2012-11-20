@@ -24,6 +24,7 @@ WriteMakefile
 	PL_FILES  => {},
 	PREREQ_PM =>
 	{
+		File::Spec   => 0,
 		Moos         => 0.13,
 		parent       => 0,
 		perl         => 5.006,

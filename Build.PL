@@ -17,6 +17,7 @@ my($builder) = Module::Build -> new
 	},
 	requires =>
 	{
+		File::Spec   => 0,
 		Moos         => 0.13,
 		parent       => 0,
 		perl         => 5.006,

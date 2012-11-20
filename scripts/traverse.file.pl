@@ -3,8 +3,12 @@
 use strict;
 use warnings;
 
+use File::Spec;
+
 use HTML::Parser::Simple::Reporter;
 
 # ---------------------------------
 
-print "$_\n" for @{HTML::Parser::Simple::Reporter -> new -> traverse_file('data/s.1.html')};
+my($p) = HTML::Parser::Simple::Reporter -> new;
+
+print "$_\n" for @{$p -> traverse_file(File::Spec -> catfile('data' ,'s.1.html') )};

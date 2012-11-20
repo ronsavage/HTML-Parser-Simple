@@ -3,13 +3,15 @@
 use strict;
 use warnings;
 
+use File::Spec;
+
 use HTML::Parser::Simple;
 
 # -----------------------
 
-HTML::Parser::Simple -> new
+print HTML::Parser::Simple -> new
 (
-	input_file  => 't/data/90.xml.declaration.xhtml',
-	output_file => 'data/90.xml.declaration.xml',
+	input_file  => File::Spec -> catfile('t', 'data', '90.xml.declaration.xhtml'),
+	output_file => File::Spec -> catfile('data', '90.xml.declaration.xml'),
 	xhtml       => 1,
-) -> parse_file;
+) -> parse_file -> result;
