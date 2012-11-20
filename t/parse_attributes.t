@@ -14,7 +14,7 @@ my $p = HTML::Parser::Simple::Attributes -> new
     }
 );
 
-my $a = $p -> parse_attributes;
+my $a = $p -> parse;
 
 is($a->{type},'text', 'unquoted attribute is parsed');
 is($a->{name},'my_name', 'double quoted attribute is parsed');
