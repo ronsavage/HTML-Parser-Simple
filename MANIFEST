@@ -13,9 +13,9 @@ MANIFEST			This list of files
 META.json
 META.yml
 README
-scripts/parse.attributes.pl
 scripts/parse.html.pl
 scripts/parse.xhtml.pl
+scripts/traverse.file.pl
 t/00.load.t
 t/01.parse.t
 t/02.comment.t

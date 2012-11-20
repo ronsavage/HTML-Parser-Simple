@@ -17,13 +17,13 @@ name: HTML-Parser-Simple
 provides:
   HTML::Parser::Simple:
     file: lib/HTML/Parser/Simple.pm
-    version: 1.08
+    version: 2.00
   HTML::Parser::Simple::Attributes:
     file: lib/HTML/Parser/Simple/Attributes.pm
-    version: 1.08
+    version: 2.00
   HTML::Parser::Simple::Reporter:
     file: lib/HTML/Parser/Simple/Reporter.pm
-    version: 1.08
+    version: 2.00
 requires:
   Moos: 0.13
   Tree::Simple: 0
@@ -33,4 +33,4 @@ requires:
   warnings: 0
 resources:
   license: http://www.perlfoundation.org/artistic_license_1_0
-version: 1.08
+version: 2.00
