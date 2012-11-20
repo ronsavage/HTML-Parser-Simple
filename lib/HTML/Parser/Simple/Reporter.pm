@@ -26,7 +26,7 @@ sub traverse
 		my($s) = ('  ' x ($depth - 1) ) . "$name. Attributes: ";
 		my($p) = HTML::Parser::Simple::Attributes -> new;
 		my($a) = $p -> parse($$metadata{attributes});
-		$s     .= $p -> hashref2string($a);
+		$s     .= $p -> hashref2string($a) . '. Content:';
 		my($c) = '';
 
 		for my $index (0 .. $#child + 1)
@@ -36,7 +36,7 @@ sub traverse
 
 		$c =~ s/^\s+//;
 		$c =~ s/\s+$//;
-		$s .= ". Content: $c";
+		$s .= " $c" if (length $c);
 
 		push @$output, $s;
 	}
