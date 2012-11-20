@@ -729,6 +729,8 @@ It parses HTML V 4 files, and generates a tree of nodes, with 1 node per HTML ta
 
 The data associated with each node is documented in the L</FAQ>.
 
+See also L<HTML::Parser::Simple::Attributes> and L<HTML::Parser::Simple::Reporter>.
+
 =head1 Distributions
 
 This module is available as a Unix-style distro (*.tgz).

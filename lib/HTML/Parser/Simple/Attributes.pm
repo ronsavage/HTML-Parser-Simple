@@ -166,6 +166,8 @@ It parses HTML V 4 attribute strings, and turns them into a hashrefs.
 Also, convenience methods L</hashref2string($hashref)> and L</string2hash($string)> are provided,
 which deal with Perl hashrefs formatted as strings.
 
+See also L<HTML::Parser::Simple> and L<HTML::Parser::Simple::Reporter>.
+
 =head1 Distributions
 
 This module is available as a Unix-style distro (*.tgz).
