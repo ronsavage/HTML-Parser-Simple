@@ -31,4 +31,5 @@ t/data/90.xml.declaration.xhtml
 t/empty_attribute.t
 t/get_current_node.t
 t/parse_attributes.t
+t/parse_html.t
 t/pod.t

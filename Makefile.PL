@@ -26,8 +26,6 @@ WriteMakefile
 	{
 		File::Spec   => 0,
 		Moos         => 0.13,
-		parent       => 0,
-		perl         => 5.006,
 		strict       => 0,
 		Test::More   => 0,
 		Test::Pod    => 0,

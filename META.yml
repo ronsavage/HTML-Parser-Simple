@@ -25,10 +25,9 @@ provides:
     file: lib/HTML/Parser/Simple/Reporter.pm
     version: 2.00
 requires:
+  File::Spec: 0
   Moos: 0.13
   Tree::Simple: 0
-  parent: 0
-  perl: 5.006
   strict: 0
   warnings: 0
 resources:
