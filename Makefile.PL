@@ -21,7 +21,7 @@ WriteMakefile
 	},
 	DISTNAME  => 'HTML-Parser-Simple',
 	NAME      => 'HTML::Parser::Simple',
-	LICENSE   => 'perl_5',
+	LICENSE   => 'artistic_2',
 	PL_FILES  => {},
 	PREREQ_PM =>
 	{
