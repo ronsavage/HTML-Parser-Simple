@@ -29,7 +29,7 @@ WriteMakefile
 		Moos         => 0.13,
 		strict       => 0,
 		Test::More => 0,
-		Test::Pod    => 1.45,
+#		Test::Pod    => 1.45, # Make it optional. See t/pod.t
 		Tree::Simple => 0,
 		warnings     => 0,
 	},
