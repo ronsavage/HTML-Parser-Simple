@@ -90,7 +90,7 @@ sub string2hashref
 	{
 		if ($s =~ m/^\{\s*([^}]*)\}$/)
 		{
-			my(@attr) = map{split(/\s*=>\s*/)} split(/\s*,\s*/, $1);
+			my(@attr) = map{s/([\"\'])(.*)\1/$2/; $_} map{split(/\s*=>\s*/)} split(/\s*,\s*/, $1);
 			$result   = {@attr} if (@attr);
 		}
 		else
