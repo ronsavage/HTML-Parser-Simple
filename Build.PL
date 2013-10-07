@@ -21,6 +21,11 @@ my($builder) = Module::Build -> new
 	 perl         => 5.006,
 	 Tree::Simple => 0,
  },
+ meta_merge => {
+	 resources => {
+		 repository => 'https://github.com/ronsavage/html--parser--simple',
+	 },
+ },
 );
 
 $builder -> create_build_script();
