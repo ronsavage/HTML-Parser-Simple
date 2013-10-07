@@ -31,4 +31,9 @@ WriteMakefile
 		Tree::Simple => 0,
 	},
 	VERSION_FROM => 'lib/HTML/Parser/Simple.pm',
+	META_MERGE => {
+		resources => {
+			repository => 'https://github.com/ronsavage/html--parser--simple',
+		},
+	},
 );
