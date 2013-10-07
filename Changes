@@ -1,5 +1,12 @@
 Revision history for Perl extension HTML::Parser::Simple.
 
+2.01  Tue Oct  8 09:36:00 2013
+	- Incorporate repository references in Build.PL and Makefile.PL, from dsteinbrunner via github. Thanx.
+	- Add 'use strict' and 'use warnings' to Build.PL and Makefile.PL, which I'm doing with all patched modules.
+	- Add 'lib' to pre-preqs in Build.PL and Makefile.PL.
+	- Take this opportunity to switch from Moos to Moo, which I'm doing with all patched modules.
+	- Rename CHANGES to Changes as per CPAN::Changes::Spec.
+
 2.00  Mon Nov 19 12:34:00 2012
 	- Implement a new API, using the pure-Perl module Moos.
 	- The use of Moos means methods which could previously be called as class methods

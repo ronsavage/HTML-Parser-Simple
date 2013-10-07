@@ -4,12 +4,11 @@ author:
   - 'Ron Savage <ron@savage.net.au>'
 build_requires:
   Test::More: 0
-  Test::Pod: 0
 configure_requires:
   Module::Build: 0.36
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120630'
-license: artistic
+generated_by: 'Module::Build version 0.4005, CPAN::Meta::Converter version 2.131560'
+license: artistic_2
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
@@ -17,19 +16,21 @@ name: HTML-Parser-Simple
 provides:
   HTML::Parser::Simple:
     file: lib/HTML/Parser/Simple.pm
-    version: 2.00
+    version: 2.01
   HTML::Parser::Simple::Attributes:
     file: lib/HTML/Parser/Simple/Attributes.pm
-    version: 2.00
+    version: 2.01
   HTML::Parser::Simple::Reporter:
     file: lib/HTML/Parser/Simple/Reporter.pm
-    version: 2.00
+    version: 2.01
 requires:
   File::Spec: 0
-  Moos: 0.13
-  Tree::Simple: 0
+  Moo: 1.003001
+  Tree::Simple: 1.22
+  lib: 0
   strict: 0
   warnings: 0
 resources:
-  license: http://www.perlfoundation.org/artistic_license_1_0
-version: 2.00
+  license: http://www.perlfoundation.org/artistic_license_2_0
+  repository: https://github.com/ronsavage/html--parser--simple
+version: 2.01

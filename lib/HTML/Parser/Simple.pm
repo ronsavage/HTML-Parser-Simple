@@ -1,35 +1,105 @@
 package HTML::Parser::Simple;
 
-use Moos; # Turns on strict and warnings. Provides 'has'.
+use strict;
+use warnings;
+
+use Moo;
 
 use Tree::Simple;
 
-has block            => (default => sub {return {} });
-has current_node     => (default => sub {return ''});
-has depth            => (default => sub {return 0});
-has empty            => (default => sub {return {} });
-has inline           => (default => sub {return {} });
-has input_file       => (default => sub {return ''});
-has node_type        => (default => sub {return 'global'});
-has output_file      => (default => sub {return ''});
-has result           => (default => sub {return ''});
-has root             => (default => sub {return ''});
-has self_close       => (default => sub {return {} });
-has tagged_attribute => (default => sub {return {} });
-has verbose          => (default => sub {return 0});
-has xhtml            =>
+has block =>
+(
+	default => sub {return {} },
+	is      => 'rw',
+);
+
+has current_node =>
+(
+	default => sub {return ''},
+	is      => 'rw',
+);
+
+has depth =>
 (
 	default => sub {return 0},
+	is      => 'rw',
+);
+
+has empty =>
+(
+	default => sub {return {} },
+	is      => 'rw',
+);
+
+has inline =>
+(
+	default => sub {return {} },
+	is      => 'rw',
+);
+
+has input_file =>
+(
+	default => sub {return ''},
+	is      => 'rw',
+);
+
+has node_type =>
+(
+	default => sub {return 'global'},
+	is      => 'rw',
+);
+
+has output_file =>
+(
+	default => sub {return ''},
+	is      => 'rw',
+);
+
+has result =>
+(
+	default => sub {return ''},
+	is      => 'rw',
+);
+
+has root =>
+(
+	default => sub {return ''},
+	is      => 'rw',
+);
+
+has self_close =>
+(
+	default => sub {return {} },
+	is      => 'rw',
+);
+
+has tagged_attribute =>
+(
+	default => sub {return {} },
+	is      => 'rw',
+);
+
+has verbose =>
+(
+	default => sub {return 0},
+	is      => 'rw',
+);
+
+has xhtml =>
+(
+	default => sub {return 0},
+	is      => 'rw',
+
 	trigger =>
 	sub
 	{
-		my($self, $new, $old) = @_;
+		my($self, $new) = @_;
 
 		$self -> _set_tagged_attribute($new);
 	}
 );
 
-our $VERSION = '2.00';
+our $VERSION = '2.01';
 
 # -----------------------------------------------
 

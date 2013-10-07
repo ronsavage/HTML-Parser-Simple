@@ -1,8 +1,11 @@
 package Data;
 
-use Moos; # Turns on strict and warnings. Provides 'has'.
+use strict;
+use warnings;
 
-our $VERSION = '2.00';
+use Moo;
+
+our $VERSION = '2.01';
 
 # -----------------------------------------------
 

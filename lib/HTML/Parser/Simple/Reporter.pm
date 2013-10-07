@@ -1,12 +1,15 @@
 package HTML::Parser::Simple::Reporter;
 
+use strict;
+use warnings;
+
 use HTML::Parser::Simple::Attributes;
 
-use Moos; # Turns on strict and warnings. Provides 'has'.
+use Moo;
 
 extends 'HTML::Parser::Simple';
 
-our $VERSION = '2.00';
+our $VERSION = '2.01';
 
 # -----------------------------------------------
 
