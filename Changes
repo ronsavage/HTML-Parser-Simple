@@ -5,6 +5,7 @@ Revision history for Perl extension HTML::Parser::Simple.
 	- Rename github repo from html--parser--simple to HTML-Parser-Simple - My new standard.
 		Update Build.PL and Makefile.PL to match.
 	- Reformat the docs, and this file, slighty, to be <= 100 chars per line - My new standard.
+	- Move t/pod.t to xt/author/.
 
 2.01  Tue Oct  8 09:36:00 2013
 	- Incorporate repository references in Build.PL and Makefile.PL, from dsteinbrunner via github.
