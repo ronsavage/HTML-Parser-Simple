@@ -33,5 +33,5 @@ t/get.current.node.t
 t/parse.attributes.t
 t/parse.html.t
 t/parse.xhtml.t
-t/pod.t
 t/traverse.file.t
+xt/author/pod.t
