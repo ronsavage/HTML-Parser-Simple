@@ -15,10 +15,10 @@ my($p) = HTML::Parser::Simple -> new
 	xhtml       => 1,
 );
 
-open(INX, '<', $p -> input_file) || BAILOUT("Can't read t/data/90.xml.declaration.xhtml");
+open(my $fh, '<', $p -> input_file) || BAILOUT("Can't read t/data/90.xml.declaration.xhtml");
 my($html);
-read(INX, $html, -s INX);
-close INX;
+read($fh, $html, -s $fh);
+close $fh;
 
 my(@got)      = split(/\n/, $p -> parse($html) -> traverse($p -> root) -> result);
 my($expected) = <<EOS;

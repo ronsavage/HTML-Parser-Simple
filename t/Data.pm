@@ -13,10 +13,10 @@ sub read_file
 {
 	my($self, $file_name) = @_;
 
-	open(INX, $file_name) || die "Can't open($file_name): $!";
+	open(my $fh, $file_name) || die "Can't open($file_name): $!";
 	my($html);
-	read(INX, $html, -s INX);
-	close INX;
+	read($fh, $html, -s $fh);
+	close $fh;
 
 	return $html;
 

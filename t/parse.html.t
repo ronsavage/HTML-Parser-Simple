@@ -11,10 +11,10 @@ use Test::More tests => 1;
 
 my($p) = HTML::Parser::Simple -> new(input_file  => File::Spec -> catfile('data', 's.1.html') );
 
-open(INX, '<', $p -> input_file) || BAILOUT("Can't read data/s.1.html");
+open(my $fh, '<', $p -> input_file) || BAILOUT("Can't read data/s.1.html");
 my($html);
-read(INX, $html, -s INX);
-close INX;
+read($fh, $html, -s $fh);
+close $fh;
 
 my(@got)      = split(/\n/, $p -> parse($html) -> traverse($p -> root) -> result);
 my($expected) = <<EOS;

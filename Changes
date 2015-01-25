@@ -1,7 +1,7 @@
 Revision history for Perl extension HTML::Parser::Simple.
 
 2.02  Sun Jan 25 11:44:00 2014
-	- No code changes.
+	- Rewrite bareword filehandles ('INX') to use a variable (my $fh).
 	- Rename github repo from html--parser--simple to HTML-Parser-Simple.
 		Update Build.PL and Makefile.PL to match.
 	- Reformat the docs slighty.

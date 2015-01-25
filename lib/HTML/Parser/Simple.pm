@@ -626,10 +626,10 @@ sub parse_file
 	$self -> output_file($output_file_name);
 	$self -> log("Reading $input_file_name");
 
-	open(INX, $input_file_name) || die "Can't open($input_file_name): $!\n";
+	open(my $fh, $input_file_name) || die "Can't open($input_file_name): $!\n";
 	my($html);
-	read(INX, $html, -s INX);
-	close INX;
+	read($fh, $html, -s $fh);
+	close $fh;
 
 	die "Can't read($input_file_name): $!\n" if (! defined $html);
 
@@ -643,9 +643,9 @@ sub parse_file
 
 	$self -> log("Writing $output_file_name");
 
-	open(OUT, "> $output_file_name") || die "Can't open(> $output_file_name): $!\n";
-	print OUT $self -> result;
-	close OUT;
+	open(my $fh, "> $output_file_name") || die "Can't open(> $output_file_name): $!\n";
+	print $fh $self -> result;
+	close $fh;
 
 	# Return the invocant to allow method chaining.
 
