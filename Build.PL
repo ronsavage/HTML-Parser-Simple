@@ -38,6 +38,7 @@ my($builder) = Module::Build -> new
 	{
 		bugtracker => 'https://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Parser-Simple',
 		license    => 'http://opensource.org/licenses/Artistic-2.0',
+		repository => 'https://github.com/ronsavage/HTML-Parser-Simple',
 	},
 );
 

@@ -1312,10 +1312,6 @@ traverse(). Then call parse() and process().
 
 =back
 
-=head2 Is the code on github?
-
-Yes. See: git://github.com/ronsavage/html--parser--simple.git
-
 =head2 How is the source formatted?
 
 I edit with UltraEdit. That means, in general, leading 4-space tabs.
