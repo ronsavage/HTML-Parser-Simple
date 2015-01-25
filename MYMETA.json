@@ -53,10 +53,7 @@
    "resources" : {
       "license" : [
          "http://www.perlfoundation.org/artistic_license_2_0"
-      ],
-      "repository" : {
-         "url" : "https://github.com/ronsavage/HTML-Parser-Simple"
-      }
+      ]
    },
    "version" : "2.02"
 }
