@@ -643,7 +643,7 @@ sub parse_file
 
 	$self -> log("Writing $output_file_name");
 
-	open(my $fh, "> $output_file_name") || die "Can't open(> $output_file_name): $!\n";
+	open($fh, "> $output_file_name") || die "Can't open(> $output_file_name): $!\n";
 	print $fh $self -> result;
 	close $fh;
 
