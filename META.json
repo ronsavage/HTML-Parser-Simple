@@ -4,7 +4,7 @@
       "Ron Savage <ron@savage.net.au>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4005, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "Module::Build version 0.421",
    "license" : [
       "artistic_2"
    ],
@@ -38,15 +38,15 @@
    "provides" : {
       "HTML::Parser::Simple" : {
          "file" : "lib/HTML/Parser/Simple.pm",
-         "version" : "2.01"
+         "version" : "2.02"
       },
       "HTML::Parser::Simple::Attributes" : {
          "file" : "lib/HTML/Parser/Simple/Attributes.pm",
-         "version" : "2.01"
+         "version" : "2.02"
       },
       "HTML::Parser::Simple::Reporter" : {
          "file" : "lib/HTML/Parser/Simple/Reporter.pm",
-         "version" : "2.01"
+         "version" : "2.02"
       }
    },
    "release_status" : "stable",
@@ -55,8 +55,8 @@
          "http://www.perlfoundation.org/artistic_license_2_0"
       ],
       "repository" : {
-         "url" : "https://github.com/ronsavage/html--parser--simple"
+         "url" : "https://github.com/ronsavage/HTML-Parser-Simple"
       }
    },
-   "version" : "2.01"
+   "version" : "2.02"
 }
