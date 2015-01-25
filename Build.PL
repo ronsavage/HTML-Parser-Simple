@@ -54,6 +54,4 @@ $class -> new
 		license    => 'http://opensource.org/licenses/Artistic-2.0',
 		repository => 'https://github.com/ronsavage/HTML-Parser-Simple',
 	},
-);
-
-$builder -> create_build_script();
+) -> create_build_script();
