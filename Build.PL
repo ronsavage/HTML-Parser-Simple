@@ -18,6 +18,13 @@ my($builder) = Module::Build -> new
 	{
 		'Module::Build' => 0.36,
 	},
+	meta_merge =>
+	{
+		resources =>
+		{
+			repository => 'https://github.com/ronsavage/HTML-Parser-Simple',
+		},
+	},
 	requires =>
 	{
 		'File::Spec'   => 0,
@@ -27,12 +34,10 @@ my($builder) = Module::Build -> new
 		'Tree::Simple' => 1.22,
 		'warnings'     => 0,
 	},
-	meta_merge =>
+	resources =>
 	{
-		resources =>
-		{
-			repository => 'https://github.com/ronsavage/html--parser--simple',
-		},
+		bugtracker => 'https://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Parser-Simple',
+		license    => 'http://opensource.org/licenses/Artistic-2.0',
 	},
 );
 

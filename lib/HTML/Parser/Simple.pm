@@ -99,7 +99,7 @@ has xhtml =>
 	}
 );
 
-our $VERSION = '2.01';
+our $VERSION = '2.02';
 
 # -----------------------------------------------
 
@@ -915,16 +915,17 @@ Typical keys: a, em, img, textarea.
 
 Gets or sets the input file name used by L</parse($input_file_name, $output_file_name)>.
 
-Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
-I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over the internal values set with
-C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
+Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take
+precedence over the I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over
+the internal values set with C<< input_file($in_file_name) >> and
+C<< output_file($out_file_name) >>.
 
 'input_file' is a parameter to L</new()>. See L</Constructor and Initialization> for details.
 
 =head2 log($msg)
 
-Print $msg to STDERR if C<< new() >> was called as C<< new(verbose => 1) >>, or if C<< $p -> verbose(1) >>
-was called.
+Print $msg to STDERR if C<< new() >> was called as C<< new(verbose => 1) >>, or if
+C<< $p -> verbose(1) >> was called.
 
 Otherwise, print nothing.
 
@@ -942,20 +943,22 @@ See the first question in the L</FAQ> for details.
 
 Gets or sets the output file name used by L</parse($input_file_name, $output_file_name)>.
 
-Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take precedence over the
-I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over the internal values set with
-C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
+Note: The parameters passed in to L</parse_file($input_file_name, $output_file_name)>, take
+precedence over the I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over
+the internal values set with C<< input_file($in_file_name) >> and
+C<< output_file($out_file_name) >>.
 
 'output_file' is a parameter to L</new()>. See L</Constructor and Initialization> for details.
 
 =head2 parse($html)
 
-Returns the invocant. Thus C<< $p -> parse >> returns $p. This allows for method chaining. See the L</Synopsis>.
+Returns the invocant. Thus C<< $p -> parse >> returns $p. This allows for method chaining. See the
+L</Synopsis>.
 
 Parses the string of HTML in $html, and builds a tree of nodes.
 
-After calling C<< $p -> parse($html) >>, you must call C<< $p -> traverse($p -> root) >> before calling
-C<< $p -> result >>.
+After calling C<< $p -> parse($html) >>, you must call C<< $p -> traverse($p -> root) >> before
+calling C<< $p -> result >>.
 
 Alternately, use C<< $p -> parse_file >>, which calls all these methods for you.
 
@@ -963,19 +966,23 @@ Note: C<< parse() >> may be called directly or via C<< parse_file() >>.
 
 =head2 parse_file($input_file_name, $output_file_name)
 
-Returns the invocant. Thus C<< $p -> parse_file >> returns $p. This allows for method chaining. See the L</Synopsis>.
+Returns the invocant. Thus C<< $p -> parse_file >> returns $p. This allows for method chaining. See
+the L</Synopsis>.
 
 Parses the HTML in the input file, and writes the result to the output file.
 
-C<< parse_file() >> calls L</parse($html)> and L</traverse($node)>, using C<< $p -> root >> for $node.
+C<< parse_file() >> calls L</parse($html)> and L</traverse($node)>, using C<< $p -> root >> for
+$node.
 
-Note: The parameters passed in to C<< parse_file($input_file_name, $output_file_name) >>, take precedence over the
-I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over the internal values set with
-C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
+Note: The parameters passed in to C<< parse_file($input_file_name, $output_file_name) >>, take
+precedence over the I<input_file> and I<output_file> parameters passed in to C<< new() >>, and over
+the internal values set with C<< input_file($in_file_name) >> and
+C<< output_file($out_file_name) >>.
 
-Lastly, the parameters passed in to C<< parse_file($input_file_name, $output_file_name) >> are used to update
-the internal values set with the I<input_file> and I<output_file> parameters passed in to C<< new() >>,
-or set with calls to C<< input_file($in_file_name) >> and C<< output_file($out_file_name) >>.
+Lastly, the parameters passed in to C<< parse_file($input_file_name, $output_file_name) >> are used
+to update the internal values set with the I<input_file> and I<output_file> parameters passed in to
+C<< new() >>, or set with calls to C<< input_file($in_file_name) >> and
+C<< output_file($out_file_name) >>.
 
 =head2 result()
 
@@ -1003,7 +1010,8 @@ Returns a string to be used as a regexp, to capture tags and their optional attr
 
 It does not return qr/$s/; it just returns $s.
 
-This regexp takes one of two forms, depending on the state of the I<xhtml> option. See L</xhtml($Boolean)>.
+This regexp takes one of two forms, depending on the state of the I<xhtml> option. See
+L</xhtml($Boolean)>.
 
 The regexp has four (4) sets of capturing parentheses:
 
@@ -1017,11 +1025,11 @@ E.g.: <(....)>
 
 E.g.: <(img)...>
 
-=item o 1 for the tag's optional attributes
+=item o 1 for the optional attributes of the tag
 
 E.g.: <img (src="/graph.svg" alt="A graph")>
 
-=item o 1 for the tag's optional trailing /
+=item o 1 for the optional trailing / of the tag
 
 E.g.: <img ... (/)>
 
@@ -1029,7 +1037,8 @@ E.g.: <img ... (/)>
 
 =head2 traverse($node)
 
-Returns the invocant. Thus C<< $p -> traverse >> returns $p. This allows for method chaining. See the L</Synopsis>.
+Returns the invocant. Thus C<< $p -> traverse >> returns $p. This allows for method chaining.
+See the L</Synopsis>.
 
 Traverses the tree of nodes, starting at $node.
 
@@ -1037,8 +1046,8 @@ You normally call this as C<< $p -> traverse($p -> root) >>, to ensure all nodes
 
 See the L</Synopsis> for sample code.
 
-Or, see scripts/traverse.file.pl, which uses L<HTML::Parser::Simple::Reporter>, and calls C<< traverse($node) >>
-via L<HTML::Parser::Simple::Reporter/traverse_file($input_file_name)>.
+Or, see scripts/traverse.file.pl, which uses L<HTML::Parser::Simple::Reporter>, and calls
+C<< traverse($node) >> via L<HTML::Parser::Simple::Reporter/traverse_file($input_file_name)>.
 
 =head2 verbose($Boolean)
 
@@ -1093,11 +1102,11 @@ because it follows the 1st child node (<i>).
 
 Likewise, ' debugging' is stored in the 2nd element of the arrayref belonging to <p>.
 
-This way, the input string can be reproduced by successively outputting the elements of the arrayref of content
-interspersed with the contents of the child nodes (processed recusively).
+This way, the input string can be reproduced by successively outputting the elements of the arrayref
+of content interspersed with the contents of the child nodes (processed recusively).
 
-Note: If you are processing this tree, never forget that there can be content after the last child node has been closed,
-but before the current node is closed.
+Note: If you are processing this tree, never forget that there can be content after the last child
+node has been closed, but before the current node is closed.
 
 Note: The DOCTYPE declaration is stored as the 0th element of the content of the root node.
 
@@ -1107,7 +1116,7 @@ The nesting depth of the tag within the document.
 
 The root is at depth 0, '<html>' is at depth 1, '<head>' and '<body>' are a depth 2, and so on.
 
-It's just there in case you need it.
+It is just there in case you need it.
 
 =item o name
 
@@ -1123,9 +1132,10 @@ The root has the node 'html' as the only child, of course.
 
 This holds 'global' before '<head>' and between '</head>' and '<body>', and after '</body>'.
 
-It holds 'head' for all nodes from '<head>' to '</head>', and holds 'body' from '<body>' to '</body>'.
+It holds 'head' for all nodes from '<head>' to '</head>', and holds 'body' from '<body>' to
+'</body>'.
 
-It's just there in case you need it.
+It is just there in case you need it.
 
 =back
 
@@ -1230,11 +1240,13 @@ Help with quirks: L<http://www.quirksmode.org/sitemap.html>.
 Yes. If your HTML file is not nice, the interpretation of tag nesting will not match
 your preconceptions.
 
-In such cases, do not seek to fix the code. Instead, fix your (faulty) preconceptions, and fix your HTML file.
+In such cases, do not seek to fix the code. Instead, fix your (faulty) preconceptions, and fix your
+HTML file.
 
 The 'a' tag, for example, is defined to be an inline tag, but the 'div' tag is a block-level tag.
 
-I don't define 'a' to be inline, others do, e.g. L<http://www.w3.org/TR/html401/> and hence HTML::Tagset.
+I do not define 'a' to be inline, others do, e.g. L<http://www.w3.org/TR/html401/> and hence
+L<HTML::Tagset>.
 
 Inline means:
 
@@ -1260,11 +1272,13 @@ You have been warned.
 
 During testing, Tree::Fast crashed, so I replaced it with Tree and everything worked. Spooky.
 
-Late news: Tree does not cope with an arrayref stored in the metadata, so I've switched to Tree::DAG_Node.
+Late news: Tree does not cope with an arrayref stored in the metadata, so I have switched to
+L<Tree::DAG_Node>.
 
-Stop press: As an experiment I switched to Tree::Simple. Since it also works I'll just keep using it.
+Stop press: As an experiment I switched to L<Tree::Simple>. Since it also works I will just keep
+using  it.
 
-=head2 Why isn't this module called HTML::Parser::PurePerl?
+=head2 Why is this module not called HTML::Parser::PurePerl?
 
 =over 4
 
@@ -1272,11 +1286,12 @@ Stop press: As an experiment I switched to Tree::Simple. Since it also works I'l
 
 That name sounds like a pure Perl version of the same API as used by HTML::Parser.
 
-But the API's are not, and are not meant to be, compatible.
+But the 2 APIs are not, and are not meant to be, compatible.
 
 =item o The tie-in
 
-Some people might falsely assume HTML::Parser can automatically fall back to HTML::Parser::PurePerl in the absence of a compiler.
+Some people might falsely assume L<HTML::Parser> can automatically fall back to
+L<HTML::Parser::PurePerl> in the absence of a compiler.
 
 =back
 
@@ -1292,8 +1307,8 @@ See L<HTML::Parser::Simple::Reporter>, for example. It overrides L</traverse($no
 
 =item o The crude way
 
-Alternately, implement another method in your sub-class, e.g. process(), which recurses like traverse().
-Then call parse() and process().
+Alternately, implement another method in your sub-class, e.g. process(), which recurses like
+traverse(). Then call parse() and process().
 
 =back
 
@@ -1311,7 +1326,7 @@ Perl::Critic is off the agenda.
 
 =head2 Why did you choose Moos?
 
-For this year's (2012) Google Code-in, I had a quick look at 122 class-building classes, and decided
+For the 2012 Google Code-in, I had a quick look at 122 class-building classes, and decided
 L<Moos> was suitable, given it is pure-Perl and has the trigger feature I needed.
 
 See L<http://savage.net.au/Module-reviews/html/gci.2012.class.builder.modules.html>.
@@ -1327,6 +1342,16 @@ Well done John!
 Note also the comments published here:
 
 L<http://groups.google.com/group/envjs/browse_thread/thread/edd9033b9273fa58>.
+
+=head1 Repository
+
+L<https://github.com/ronsavage/HTML-Parser-Simple>
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=HTML::Parser::Simple>.
 
 =head1 Author
 

@@ -9,7 +9,7 @@ use Moo;
 
 extends 'HTML::Parser::Simple';
 
-our $VERSION = '2.01';
+our $VERSION = '2.02';
 
 # -----------------------------------------------
 

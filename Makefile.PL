@@ -6,7 +6,7 @@ use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 
-WriteMakefile
+my(%params) =
 (
 	($] ge '5.005') ?
 	(
@@ -38,11 +38,33 @@ WriteMakefile
 		'warnings'     => 0,
 	},
 	VERSION_FROM => 'lib/HTML/Parser/Simple.pm',
-	META_MERGE   =>
-	{
-		resources =>
-		{
-			repository => 'https://github.com/ronsavage/html--parser--simple',
-		},
-	},
 );
+
+if ( ($ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/) && ($ExtUtils::MakeMaker::VERSION > 6.30) )
+{
+	$params{LICENSE} = 'artistic_2';
+}
+
+if ($ExtUtils::MakeMaker::VERSION ge '6.46')
+{
+	$params{META_MERGE} =
+	{
+		'meta-spec' =>
+		{
+			version => 2,
+		},
+		resources   =>
+		{
+			bugtracker => 'https://rt.cpan.org/Public/Dist/Display.html?Name=HTML-Parser-Simple',
+			license    => 'http://opensource.org/licenses/Artistic-2.0',
+			repository =>
+			{
+				type => 'git',
+				url  => 'https://github.com/ronsavage/HTML-Parser-Simple.git',
+				web  => 'https://github.com/ronsavage/HTML-Parser-Simple',
+			},
+		},
+	};
+}
+
+WriteMakefile(%params);
